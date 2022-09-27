@@ -523,11 +523,12 @@ _QP             sta PAGE6_BASE,X
 ;--------------------------------------
 
 CART_START      ldx #$28
-_next1          lda LA7F0,X
-                sta LBB80_DLIST,X
+_next1          lda FTABLE_ROM,X
+                sta LBB80_DLIST,X       ; copy protection -- attempt to write to ROM
                 sta FTABLE,X
+
                 lda LBB80_DLIST,X
-                sta L0800,X
+                sta DLIST_RAM,X
                 dex
                 bpl _next1
 
@@ -1024,12 +1025,13 @@ MODE4           .proc
                 sta CHBAS
                 ldx #$26                ; BROWN
                 ldy #$AA                ; BLUE
+
                 lda #$04
 _CHDL           stx COLOR1
                 sty COLOR2
 
                 ldx #$16
-_CHDLP          sta L0804,X             ; DLIST+4
+_CHDLP          sta DLIST_RAM+4,X
                 dex
                 bne _CHDLP
 

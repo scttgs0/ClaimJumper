@@ -124,8 +124,7 @@ BONUS2              = $06F8
 OPTFL               = $06F9
 STRTFL              = $06FA
 
-L0800               = $0800
-L0804               = $0804
+DLIST_RAM           = $0800
 
 MBAS6               = $0B00
 PMSCAL              = $0B25
