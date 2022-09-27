@@ -571,7 +571,7 @@ DRAWCN          .proc
                 clc
                 adc CNTYPE
                 tax
-_NXLN1          lda LB1E0,X             ; =CANS
+_NXLN1          lda STAMP_CANS,X        ; =CANS
                 sta (zpYP),Y
                 dex
                 dey
