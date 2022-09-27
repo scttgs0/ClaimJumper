@@ -410,10 +410,10 @@ ERSPM           .proc
                 lda #$00
                 tay
 _ERPML          sta MBAS6,Y
-                sta L0C00,Y
-                sta L0D00,Y
-                sta L0E00,Y
-                sta L0F00,Y
+                sta STAMPS_A_RAM,Y
+                sta STAMPS_B_RAM,Y
+                sta STAMPS_C_RAM,Y
+                sta TitleGlyphs_RAM,Y
                 iny
                 bne _ERPML
 

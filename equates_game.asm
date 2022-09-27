@@ -132,13 +132,11 @@ PMSCAL              = $0B25
 PMSTOR              = $0BD3
 L0BD6               = $0BD6
 
-L0C00               = $0C00
-L0D00               = $0D00
-L0E00               = $0E00
-L0F00               = $0F00
-L0FAD               = $0FAD
+STAMPS_A_RAM        = $0C00
+STAMPS_B_RAM        = $0D00
+STAMPS_C_RAM        = $0E00
+TitleGlyphs_RAM     = $0F00
 
-L1B80               = $1B80
 L1BC8               = $1BC8
 L1BCB               = $1BCB
 L1BCC               = $1BCC
