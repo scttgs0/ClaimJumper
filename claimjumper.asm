@@ -2216,22 +2216,294 @@ STAMPS_C        ;.byte $20,$A8,$AA,$AA,$2A,$AA,$AA,$2C      ; tubmleweek - part 
                 .byte %00000000         ; ........
                 .byte %00001100         ; ....##..
 
-LB300           .byte $FF,$FF,$F0,$F0,$F0,$F0,$F0,$F0,$FF,$FF,$F3,$F3,$FF,$FF,$FF,$FF
-                .byte $FF,$FF,$CF,$CF,$FF,$FF,$FF,$FF,$FF,$C3,$C3,$FF,$00,$F3,$F3,$F3
-                .byte $C0,$FF,$C0,$FF,$00,$FF,$C0,$FF,$00,$FF,$FF,$FF,$CC,$FF,$FF,$FF
-                .byte $00,$00,$00,$0A,$06,$29,$2A,$AA,$00,$01,$01,$AA,$A6,$AA,$9A,$AA
-                .byte $00,$40,$40,$A0,$A0,$98,$A8,$AA,$FF,$03,$33,$33,$03,$33,$33,$FF
-                .byte $FF,$03,$3F,$03,$F3,$F3,$03,$FF,$FF,$33,$33,$03,$CF,$CF,$CF,$FF
-                .byte $FF,$FF,$FF,$C3,$00,$00,$00,$FF,$28,$08,$10,$14,$00,$28,$10,$00
-                .byte $80,$A0,$00,$50,$40,$20,$A0,$00,$FF,$FF,$C3,$FF,$FF,$FF,$FF,$FF
-                .byte $AA,$AA,$AA,$AA,$AA,$AA,$AA,$00,$FF,$00,$33,$33,$33,$33,$33,$33
-                .byte $55,$55,$55,$55,$55,$55,$55,$00,$FF,$00,$CC,$CC,$CC,$CC,$CC,$CC
-                .byte $00,$00,$33,$33,$33,$33,$33,$33,$00,$40,$40,$C0,$8C,$C4,$4C,$CC
-                .byte $FF,$CF,$C0,$C0,$C0,$C0,$CF,$FF,$FF,$FF,$0F,$03,$03,$0F,$FF,$FF
-                .byte $00,$FF,$FF,$FF,$33,$FF,$FF,$FF,$33,$33,$33,$33,$33,$00,$FF,$00
-                .byte $18,$38,$18,$18,$18,$18,$18,$7E,$CC,$CC,$CC,$CC,$CC,$00,$FF,$00
-                .byte $3F,$3F,$03,$03,$03,$03,$03,$03,$4C,$FC,$FC,$C0,$C0,$C0,$C0,$C0
-                .byte $FF,$F0,$F0,$F0,$F0,$FC,$FC,$FC,$FF,$3F,$3F,$3F,$0F,$0F,$0F,$0F
+STAMPS_D        ;.byte $FF,$FF,$F0,$F0,$F0,$F0,$F0,$F0      ; building
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                ;.byte $FF,$FF,$F3,$F3,$FF,$FF,$FF,$FF
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11110011         ; CC.C
+                .byte %11110011         ; CC.C
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                ;.byte $FF,$FF,$CF,$CF,$FF,$FF,$FF,$FF
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11001111         ; C.CC
+                .byte %11001111         ; C.CC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                ;.byte $FF,$C3,$C3,$FF,$00,$F3,$F3,$F3
+                .byte %11111111         ; CCCC
+                .byte %11000011         ; C..C
+                .byte %11000011         ; C..C
+                .byte %11111111         ; CCCC
+                .byte %00000000         ; ....
+                .byte %11110011         ; CC.C
+                .byte %11110011         ; CC.C
+                .byte %11110011         ; CC.C
+                ;.byte $C0,$FF,$C0,$FF,$00,$FF,$C0,$FF
+                .byte %11000000         ; C...
+                .byte %11111111         ; CCCC
+                .byte %11000000         ; C...
+                .byte %11111111         ; CCCC
+                .byte %00000000         ; ....
+                .byte %11111111         ; CCCC
+                .byte %11000000         ; C...
+                .byte %11111111         ; CCCC
+                ;.byte $00,$FF,$FF,$FF,$CC,$FF,$FF,$FF
+                .byte %00000000         ; ....
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11001100         ; C.C.
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                ;.byte $00,$00,$00,$0A,$06,$29,$2A,$AA      ; rooftop
+                .byte %00000000         ; .... .... ....
+                .byte %00000000         ; .... ...A A...
+                .byte %00000000         ; .... ...A A...
+                .byte %00001010         ; ..BB BBBB BB..
+                .byte %00000110         ; ..AB BBAB BB..
+                .byte %00101001         ; .BBA BBBB BAB.
+                .byte %00101010         ; .BBB BABB BBB.
+                .byte %10101010         ; BBBB BBBB BBBB
+                ;.byte $00,$01,$01,$AA,$A6,$AA,$9A,$AA
+                .byte %00000000         ; ....
+                .byte %00000001         ; ...A
+                .byte %00000001         ; ...A
+                .byte %10101010         ; BBBB
+                .byte %10100110         ; BBAB
+                .byte %10101010         ; BBBB
+                .byte %10011010         ; BABB
+                .byte %10101010         ; BBBB
+                ;.byte $00,$40,$40,$A0,$A0,$98,$A8,$AA
+                .byte %00000000         ; ....
+                .byte %01000000         ; A...
+                .byte %01000000         ; A...
+                .byte %10100000         ; BB..
+                .byte %10100000         ; BB..
+                .byte %10011000         ; BAB.
+                .byte %10101000         ; BBB.
+                .byte %10101010         ; BBBB
+                ;.byte $FF,$03,$33,$33,$03,$33,$33,$FF      ; assay
+                .byte %11111111         ; CCCC
+                .byte %00000011         ; ...C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00000011         ; ...C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %11111111         ; CCCC
+                ;.byte $FF,$03,$3F,$03,$F3,$F3,$03,$FF
+                .byte %11111111         ; CCCC
+                .byte %00000011         ; ...C
+                .byte %00111111         ; .CCC
+                .byte %00000011         ; ...C
+                .byte %11110011         ; CC.C
+                .byte %11110011         ; CC.C
+                .byte %00000011         ; ...C
+                .byte %11111111         ; CCCC
+                ;.byte $FF,$33,$33,$03,$CF,$CF,$CF,$FF
+                .byte %11111111         ; CCCC
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00000011         ; ...C
+                .byte %11001111         ; C.CC
+                .byte %11001111         ; C.CC
+                .byte %11001111         ; C.CC
+                .byte %11111111         ; CCCC
+                ;.byte $FF,$FF,$FF,$C3,$00,$00,$00,$FF      ; nugget deposit slot
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11000011         ; C..C
+                .byte %00000000         ; ....
+                .byte %00000000         ; ....
+                .byte %00000000         ; ....
+                .byte %11111111         ; CCCC
+                ;.byte $28,$08,$10,$14,$00,$28,$10,$00      ; barbed-wire
+                .byte %00101000         ; .BB.
+                .byte %00001000         ; ..B.
+                .byte %00010000         ; .A..
+                .byte %00010100         ; .AA.
+                .byte %00000000         ; ....
+                .byte %00101000         ; .BB.
+                .byte %00010000         ; .A..
+                .byte %00000000         ; ....
+                ;.byte $80,$A0,$00,$50,$40,$20,$A0,$00
+                .byte %10000000         ; B...
+                .byte %10100000         ; BB..
+                .byte %00000000         ; ....
+                .byte %01010000         ; AA..
+                .byte %01000000         ; A...
+                .byte %00100000         ; .B..
+                .byte %10100000         ; BB..
+                .byte %00000000         ; ....
+                ;.byte $FF,$FF,$C3,$FF,$FF,$FF,$FF,$FF      ; building
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11000011         ; C..C
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                ;.byte $AA,$AA,$AA,$AA,$AA,$AA,$AA,$00
+                .byte %10101010         ; BBBB
+                .byte %10101010         ; BBBB
+                .byte %10101010         ; BBBB
+                .byte %10101010         ; BBBB
+                .byte %10101010         ; BBBB
+                .byte %10101010         ; BBBB
+                .byte %10101010         ; BBBB
+                .byte %00000000         ; ....
+                ;.byte $FF,$00,$33,$33,$33,$33,$33,$33
+                .byte %11111111         ; CCCC
+                .byte %00000000         ; ....
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                ;.byte $55,$55,$55,$55,$55,$55,$55,$00
+                .byte %01010101         ; AAAA
+                .byte %01010101         ; AAAA
+                .byte %01010101         ; AAAA
+                .byte %01010101         ; AAAA
+                .byte %01010101         ; AAAA
+                .byte %01010101         ; AAAA
+                .byte %01010101         ; AAAA
+                .byte %00000000         ; ....
+                ;.byte $FF,$00,$CC,$CC,$CC,$CC,$CC,$CC
+                .byte %11111111         ; CCCC
+                .byte %00000000         ; ....
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                ;.byte $00,$00,$33,$33,$33,$33,$33,$33
+                .byte %00000000         ; ....
+                .byte %00000000         ; ....
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                ;.byte $00,$40,$40,$C0,$8C,$C4,$4C,$CC
+                .byte %00000000         ; ....
+                .byte %01000000         ; A...
+                .byte %01000000         ; A...
+                .byte %11000000         ; C...
+                .byte %10001100         ; B.C.
+                .byte %11000100         ; C.A.
+                .byte %01001100         ; A.C.
+                .byte %11001100         ; C.C.
+                ;.byte $FF,$CF,$C0,$C0,$C0,$C0,$CF,$FF
+                .byte %11111111         ; CCCC
+                .byte %11001111         ; C.CC
+                .byte %11000000         ; C...
+                .byte %11000000         ; C...
+                .byte %11000000         ; C...
+                .byte %11000000         ; C...
+                .byte %11001111         ; C.CC
+                .byte %11111111         ; CCCC
+                ;.byte $FF,$FF,$0F,$03,$03,$0F,$FF,$FF
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %00001111         ; ..CC
+                .byte %00000011         ; ...C
+                .byte %00000011         ; ...C
+                .byte %00001111         ; ..CC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                ;.byte $00,$FF,$FF,$FF,$33,$FF,$FF,$FF
+                .byte %00000000         ; ....
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %00110011         ; .C.C
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                .byte %11111111         ; CCCC
+                ;.byte $33,$33,$33,$33,$33,$00,$FF,$00
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00110011         ; .C.C
+                .byte %00000000         ; ....
+                .byte %11111111         ; CCCC
+                .byte %00000000         ; ....
+                ;.byte $18,$38,$18,$18,$18,$18,$18,$7E
+                .byte %00011000         ; .AB.
+                .byte %00111000         ; .CB.
+                .byte %00011000         ; .AB.
+                .byte %00011000         ; .AB.
+                .byte %00011000         ; .AB.
+                .byte %00011000         ; .AB.
+                .byte %00011000         ; .AB.
+                .byte %01111110         ; ACCB
+                ;.byte $CC,$CC,$CC,$CC,$CC,$00,$FF,$00
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %11001100         ; C.C.
+                .byte %00000000         ; ....
+                .byte %11111111         ; CCCC
+                .byte %00000000         ; ....
+                ;.byte $3F,$3F,$03,$03,$03,$03,$03,$03
+                .byte %00111111         ; .CCC
+                .byte %00111111         ; .CCC
+                .byte %00000011         ; ...C
+                .byte %00000011         ; ...C
+                .byte %00000011         ; ...C
+                .byte %00000011         ; ...C
+                .byte %00000011         ; ...C
+                .byte %00000011         ; ...C
+                ;.byte $4C,$FC,$FC,$C0,$C0,$C0,$C0,$C0
+                .byte %01001100         ; A.C.
+                .byte %11111100         ; CCC.
+                .byte %11111100         ; CCC.
+                .byte %11000000         ; C...
+                .byte %11000000         ; C...
+                .byte %11000000         ; C...
+                .byte %11000000         ; C...
+                .byte %11000000         ; C...
+                ;.byte $FF,$F0,$F0,$F0,$F0,$FC,$FC,$FC
+                .byte %11111111         ; CCCC
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                .byte %11110000         ; CC..
+                .byte %11111100         ; CCC.
+                .byte %11111100         ; CCC.
+                .byte %11111100         ; CCC.
+                ;.byte $FF,$3F,$3F,$3F,$0F,$0F,$0F,$0F
+                .byte %11111111         ; CCCC
+                .byte %00111111         ; .CCC
+                .byte %00111111         ; .CCC
+                .byte %00111111         ; .CCC
+                .byte %00001111         ; ..CC
+                .byte %00001111         ; ..CC
+                .byte %00001111         ; ..CC
+                .byte %00001111         ; ..CC
 
 
 ;--------------------------------------
