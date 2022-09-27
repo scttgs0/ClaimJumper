@@ -552,7 +552,8 @@ _QS9            lda L9800,X
                 lda #$78
                 sta L1D06
 
-                ldy #$A0
+;   copy character set to RAM
+                ldy #$A0                ; CharSet @ $96A0
 _BOTLIN         lda L9600-1,Y
                 sta L1F5F,Y
                 dey
