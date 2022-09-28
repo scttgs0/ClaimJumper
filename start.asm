@@ -360,11 +360,11 @@ COLPM           .proc
 CLRSCR          .proc
                 ldy #$00
                 tya
-_LIN01          sta L1C00,Y
-                sta L1D00,Y
+_LIN01          sta scrnL00C16,Y
+                sta scrnL06C32,Y
                 sta L1E00,Y
                 sta L1F00,Y
-                sta L1BC8,Y
+                sta ScreenFooter,Y
                 dey
                 bne _LIN01
 
@@ -394,9 +394,9 @@ _BOTLP          sta L1FB1,X
 
                 ldx #$3F
 _TOPROW         lda LBFD0,X
-                sta L1BF0,X
+                sta ScreenBuffer,X
                 lda L9800,X             ; HOSPIT
-                sta L1C00,X
+                sta scrnL00C16,X
                 dex
                 bpl _TOPROW
 
@@ -541,17 +541,17 @@ _next1          lda FTABLE_ROM,X
 HOSPIT          .proc
                 ldx #$00
 _QS9            lda L9800,X
-                sta L1C00,X
+                sta scrnL00C16,X
                 dex
                 bne _QS9
 
                 lda #$1B
-                sta L1D09
+                sta scrnL07C01
                 lda #$3E
-                sta L1D05
+                sta scrnL06C37
                 sta L1D2E
                 lda #$78
-                sta L1D06
+                sta scrnL06C38
 
 ;   copy character set to RAM
                 ldy #$A0                ; CharSet @ $96A0

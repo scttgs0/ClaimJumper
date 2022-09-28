@@ -661,7 +661,7 @@ _NEXTZ          iny
 SCDEC0          .proc
                 lda #$00
                 ldx NUMBL0
-                sta L1BCC,X
+                sta ScreenFooter+4,X
                 rts
                 .endproc
 
@@ -675,7 +675,7 @@ SCDEC2          .proc
                 sbc NUMBL2
                 tax
                 lda #$00
-                sta L1BE1,X
+                sta ScreenFooter+25,X
                 rts
                 .endproc
 

@@ -136,18 +136,15 @@ STAMPS_B_RAM        = $0D00
 STAMPS_C_RAM        = $0E00
 TitleGlyphs_RAM     = $0F00
 
-L1BC8               = $1BC8
-L1BCB               = $1BCB
-L1BCC               = $1BCC
-L1BE1               = $1BE1
-L1BF0               = $1BF0
-L1C00               = $1C00
-L1C18               = $1C18
-L1C58               = $1C58
-L1D00               = $1D00
-L1D05               = $1D05
-L1D06               = $1D06
-L1D09               = $1D09
+ScreenFooter        = $1BC8     ; [1BC8:1BEF]
+ScreenBuffer        = $1BF0     ; [1BF0:1FFF]
+scrnL00C16          = $1C00
+scrnL01C00          = $1C18
+scrnL02C24          = $1C58
+scrnL06C32          = $1D00
+scrnL06C37          = $1D05
+scrnL06C38          = $1D06
+scrnL07C01          = $1D09
 L1D11               = $1D11
 L1D17               = $1D17
 L1D1D               = $1D1D
@@ -192,6 +189,9 @@ L1FE6               = $1FE6
 L1FF4               = $1FF4
 L1FF5               = $1FF5
 L1FFF               = $1FFF
+
+;--- end of ScreenBuffer ---
+
 
 L39F2               = $39F2
 L39F6               = $39F6

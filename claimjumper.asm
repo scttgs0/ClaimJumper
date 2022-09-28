@@ -361,9 +361,9 @@ L941A           lda STAMPS_A,Y
 
                 lda #$07
                 ldx #$27
-L944C           sta L1C00,X
-                sta L1C18,X
-                sta L1BF0,X
+L944C           sta scrnL00C16,X
+                sta scrnL01C00,X
+                sta ScreenBuffer,X
                 sta L1FB0,X
                 dex
                 bpl L944C
@@ -726,9 +726,10 @@ FLESH           .byte $00,$00,$00,$C0,$C0,$00,$00,$00,$00,$00,$C0,$00,$00,$00,$0
 
                 .include "main.asm"
 
-LBB80_DLIST     .byte AEMPTY8
-                .byte $04+ALMS
-                    .word $1BF0
+LBB80_DLIST     .byte AEMPTY8           ; 8 scanlines
+
+                .byte $04+ALMS          ; 200 scanlines - 25 lines of 4-color text
+                    .addr ScreenBuffer
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04,$04
@@ -736,10 +737,12 @@ LBB80_DLIST     .byte AEMPTY8
                 .byte $04,$04,$04,$04
                 .byte $04,$04,$04
                 .byte $04+ADLI
-                .byte AEMPTY1
-                .byte $02
-                .byte $04+ALMS
-                    .word $1BC8
+
+                .byte AEMPTY1           ; 1 scanline
+
+                .byte $02               ; 8 scanlines - 1 line of 2-color text
+                .byte $04+ALMS          ; 8 scanlines - 1 line of 4-color text
+                    .addr ScreenFooter
                 .byte AVB+AJMP
                     .word $1B80         ; LBB80_DLIST
 
@@ -1198,7 +1201,7 @@ LBE67           lda M1PL
 
                 ldy #$0A
                 lda #$7D
-LBE85           sta L1BE1,Y
+LBE85           sta ScreenFooter+25,Y
                 dey
                 bne LBE85
 
@@ -1207,7 +1210,7 @@ LBE85           sta L1BE1,Y
 
 LBE8F           ldy #$0A
                 lda #$7C
-LBE93           sta L1BCB,Y
+LBE93           sta ScreenFooter+3,Y
                 dey
                 bne LBE93
 
@@ -1401,7 +1404,7 @@ LBF73           lda STATCN
                 lda #$89
                 sta HPOSM1
                 lda #$1C
-                sta L1C58
+                sta scrnL02C24
                 rts
 
 LBF93           lda FRAME
@@ -1435,7 +1438,7 @@ LBFC2           lda #$07
                 sta L1F8C
                 sta L1FAB
 LBFCA           lda #$00
-                sta L1C58
+                sta scrnL02C24
                 rts
 
 ;--------------------------------------

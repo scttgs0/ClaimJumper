@@ -469,7 +469,7 @@ _BILL           lda M1PL
 P06BUL          .proc
                 ldy #$0A
                 lda #$7D
-_Q76            sta L1BE1,Y
+_Q76            sta ScreenFooter+25,Y
                 dey
                 bne _Q76
 
@@ -485,7 +485,7 @@ _Q76            sta L1BE1,Y
 STOHOU          .proc
                 ldy #$0A
                 lda #$7C
-L9E93           sta L1BCB,Y
+L9E93           sta ScreenFooter+3,Y
                 dey
                 bne L9E93
 
@@ -696,7 +696,7 @@ _COLOK          lda STATCN
                 lda #$89                ; SCALE
                 sta HPOSM1
                 lda #$1C
-                sta L1C58
+                sta scrnL02C24
                 rts
 
 _FBILL          lda FRAME
@@ -732,7 +732,7 @@ _TRIIN          lda #$07
 _M1OFF          lda #$00
                 sta HPOSM1
                 lda #$07
-                sta L1C58
+                sta scrnL02C24
                 rts
 
 ;---
