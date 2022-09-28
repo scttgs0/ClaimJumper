@@ -292,9 +292,9 @@ INIT            .proc
                 lda #$0C
                 sta CHBAS
 
-                lda #$E0            ; DLI
+                lda #<L95E0_DLI
                 sta VDSLST
-                lda #$95
+                lda #>L95E0_DLI
                 sta VDSLST+1
 
                 lda #$C0
@@ -492,7 +492,7 @@ _TITLEA         ldy #$0B
 
 _TITLE6         ldy #$53
 _TITLE          ldx #$0B
-_QS11           lda L9500,Y
+_QS11           lda MsgYouLose,Y
                 sta L1FE6,X
                 dey
                 dex
@@ -1044,13 +1044,13 @@ _CHDLP          sta DLIST_RAM+4,X
 ;======================================
 OP0TEX          .proc
                 ldx #$0B
-_TXT0LP         lda L953C,X
+_TXT0LP         lda MsgSelect,X
                 sta L1D17,X
-                lda L950C,X
+                lda MsgTitle,X
                 sta L1DB8,X
-                lda L9518,X
+                lda MsgShootem1,X
                 sta L1E30,X
-                lda L95C0,X
+                lda MsgShootem2,X
                 sta L1EA8,X
                 dex
                 bpl _TXT0LP
@@ -1064,17 +1064,17 @@ _TXT0LP         lda L953C,X
 ;======================================
 OP2TEX          .proc
                 ldx #$0B
-_TXT2LP         lda L9524,X
+_TXT2LP         lda MsgChoose1,X
                 sta L1D11,X
-                lda L9530,X
+                lda MsgChoose2,X
                 sta L1D1D,X
-                lda L9554,X
+                lda MsgNormPlay,X
                 sta L1DAE,X
                 sta L1DC1,X
-                lda L9560,X
+                lda MsgBuyBullet,X
                 sta L1E26,X
                 sta L1E39,X
-                lda L956C,X
+                lda MsgHandicap,X
                 sta L1E9E,X
                 sta L1EB1,X
                 dex
