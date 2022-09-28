@@ -328,14 +328,19 @@ L9408           jmp L940E
 ;======================================
 L940B           jmp L946A
 
+
+;--------------------------------------
+;
+;--------------------------------------
 L940E           lda #$00
                 ldy #$07
-L9412           sta HPOSP0,Y
+_next1          sta HPOSP0,Y
                 dey
-                bpl L9412
+                bpl _next1
 
+;   copy ROM to RAM
                 ldy #$00
-L941A           lda STAMPS_A,Y
+_next2          lda STAMPS_A,Y
                 sta STAMPS_A_RAM,Y
 
                 lda STAMPS_B,Y
@@ -347,12 +352,14 @@ L941A           lda STAMPS_A,Y
                 lda TitleGlyphs,Y
                 sta TitleGlyphs_RAM,Y
                 dey
-                bne L941A
+                bne _next2
 
-                lda #$0C
+                lda #$0C                ; standard character set
                 sta CHBAS
+
                 lda #$07
                 sta zpSCDATA
+
                 ldy #$40
                 jsr STCOL
 
@@ -361,60 +368,64 @@ L941A           lda STAMPS_A,Y
 
                 lda #$07
                 ldx #$27
-L944C           sta scrnL00C16,X
+_next3          sta scrnL00C16,X
                 sta scrnL01C00,X
                 sta ScreenBuffer,X
                 sta L1FB0,X
                 dex
-                bpl L944C
+                bpl _next3
 
                 ldx #$4F
-L945D           lda L94B0,X
+_next4          lda L94B0,X
                 sta L1DD0,X
                 dex
-                bne L945D
+                bne _next4
 
                 stx L1FFF
-L9469           rts
+_XIT            rts
 
+
+;--------------------------------------
+;
+;--------------------------------------
 L946A           lda FRAME
                 and #$7F
-                bne L9469
+                bne L940E._XIT
 
                 inc L066B
                 lda L066B
                 and #$03
-                beq L9486
+                beq _1
 
                 tax
                 dex
-                beq L949C
+                beq _4
 
                 dex
-                beq L948A
+                beq _2
 
                 ldy #$8F
-                bne L948C
+                bne _3
 
-L9486           ldy #$BF
-                bne L948C
+_1              ldy #$BF
+                bne _3
 
-L948A           ldy #$A7
-L948C           ldx #$17
-L948E           lda L9500,Y
+_2              ldy #$A7
+_3              ldx #$17
+_next1          lda MsgYouLose,Y
                 sta L1FE0,X
                 lsr CANROU,X
                 dey
                 dex
-                bpl L948E
+                bpl _next1
 
                 rts
 
-L949C           ldx #$17
+_4              ldx #$17
                 lda #$00
-L94A0           sta L1FE0,X
+_next2          sta L1FE0,X
                 dex
-                bpl L94A0
+                bpl _next2
 
                 rts
 
@@ -423,38 +434,47 @@ L94A0           sta L1FE0,X
 
                 .fill 9,$00
 
-L94B0           .byte $07,$00,$00,$00,$60,$61,$00,$64,$00,$00,$67,$68,$00,$64,$00,$6B
-                .byte $6C,$00,$00,$00,$00,$6E,$00,$64,$6E,$00,$6B,$6C,$00,$71,$72,$00
-                .byte $76,$77,$00,$71,$72,$00,$00,$07,$07,$00,$00,$00,$62,$63,$00,$65
-                .byte $66,$00,$69,$6A,$00,$64,$00,$6D,$6E,$00,$00,$00,$6F,$70,$00,$62
-                .byte $70,$00,$6D,$6E,$00,$73,$74,$00,$78,$79,$00,$73,$75,$00,$00,$07
+L94B0           .byte $07,$00,$00,$00,$60,$61,$00,$64   ; two lines of text??
+                .byte $00,$00,$67,$68,$00,$64,$00,$6B
+                .byte $6C,$00,$00,$00,$00,$6E,$00,$64
+                .byte $6E,$00,$6B,$6C,$00,$71,$72,$00
+                .byte $76,$77,$00,$71,$72,$00,$00,$07
+                .byte $07,$00,$00,$00,$62,$63,$00,$65
+                .byte $66,$00,$69,$6A,$00,$64,$00,$6D
+                .byte $6E,$00,$00,$00,$6F,$70,$00,$62
+                .byte $70,$00,$6D,$6E,$00,$73,$74,$00
+                .byte $78,$79,$00,$73,$75,$00,$00,$07
 
             .enc "atari-screen"
-L9500           .text '  you lose  '
-L950C           .text 'claim jumper'
-L9518           .text 'shootvem one'
-L9524           .text 'press trigge'
-L9530           .text 'r to choose '
-L953C           .text 'press select  you  win  '
-L9554           .text 'normal play '
-L9560           .text 'buy bullets '
-L956C           .text 'head start '
+MsgYouLose      .text '  you lose  '
+MsgTitle        .text 'claim jumper'
+MsgShootem1     .text 'shootvem one'
+MsgChoose1      .text 'press trigge'
+MsgChoose2      .text 'r to choose '
+MsgSelect       .text 'press select'
+                .text '  you  win  '
+MsgNormPlay     .text 'normal play '
+MsgBuyBullet    .text 'buy bullets '
+MsgHandicap     .text 'head start  '
             .enc "none"
 
-            .byte $00,$00,$7A,$7B,$57,$5F,$5E,$58,$00
+            .byte $00,$7A,$7B,$57,$5F,$5E,$58,$00
 
             .enc "atari-screen"
                 .text 'synapse software    '
                 .text '  by gray chang     '
                 .text '       press start  '
                 .text '    '
-L95C0           .text 'shootvem two    '
-                .text '                '
+MsgShootem2     .text 'shootvem two'
+                .text '            '
+                .text '        '
             .enc "none"
 
-;--------------------------------------
-;--------------------------------------
-                pha
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; DLI
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+L95E0_DLI       pha
                 lda #$A0
                 eor COLRSH
                 and DRKMSK
@@ -470,48 +490,87 @@ L95C0           .text 'shootvem two    '
 
                 .fill 12,$00
 
-L9600           .byte $70,$70,$70,$70,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$72,$72,$72,$72,$70,$73,$73,$70,$07,$00,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$6D,$07,$65,$76,$77,$78,$07,$6D
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$07,$72,$71,$71,$72
-                .byte $70,$7B,$7B,$70,$07,$07,$07,$07,$07,$07,$07,$07,$07,$07,$1D,$07
-                .byte $6D,$07,$6F,$7E,$7F,$6F,$07,$6D,$07,$1E,$07,$07,$07,$07,$07,$07
-                .byte $07,$07,$07,$07,$72,$79,$79,$72,$62,$61,$6E,$6B,$60,$60,$60,$60
-                .byte $60,$60,$60,$60,$60,$60,$60,$67,$6F,$6C,$64,$60,$60,$72,$75,$73
-                .byte $68,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$60,$62,$61,$6E,$6B
+L9600           .byte $70,$70,$70,$70,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$72,$72,$72,$72
+                .byte $70,$73,$73,$70,$07,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $6D,$07,$65,$76,$77,$78,$07,$6D
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$07,$72,$71,$71,$72
+                .byte $70,$7B,$7B,$70,$07,$07,$07,$07
+                .byte $07,$07,$07,$07,$07,$07,$1D,$07
+                .byte $6D,$07,$6F,$7E,$7F,$6F,$07,$6D
+                .byte $07,$1E,$07,$07,$07,$07,$07,$07
+                .byte $07,$07,$07,$07,$72,$79,$79,$72
+                .byte $62,$61,$6E,$6B,$60,$60,$60,$60
+                .byte $60,$60,$60,$60,$60,$60,$60,$67
+                .byte $6F,$6C,$64,$60,$60,$72,$75,$73
+                .byte $68,$60,$60,$60,$60,$60,$60,$60
+                .byte $60,$60,$60,$60,$62,$61,$6E,$6B
 
                 .include "CHARSET.asm"
 
-L9800           .byte $07,$07,$07,$07,$07,$07,$07,$07,$07,$E7,$07,$66,$67,$68,$07,$E5
-                .byte $E5,$E5,$E5,$E5,$E5,$07,$67,$07,$07,$60,$61,$62,$07,$E0,$E4,$E2
-                .byte $07,$63,$64,$63,$07,$60,$61,$07,$65,$65,$65,$65,$65,$65,$65,$65
-                .byte $07,$E1,$07,$63,$60,$62,$07,$E4,$E1,$E0,$E1,$E3,$E3,$07,$65,$07
-                .byte $CD,$65,$65,$65,$65,$65,$1B,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $62,$69,$6A,$6A,$69,$6B,$6C,$61,$07,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$3E,$78,$78,$78,$78,$78,$4E,$CD,$65,$07,$3A,$65,$1B,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$3E,$78,$3B,$07,$78,$4E
-                .byte $CD,$65,$4F,$65,$1B,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$3E,$78,$4F,$78,$4E,$CD,$65,$65,$1B,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$3E,$78,$78,$4E
-                .byte $CD,$65,$1B,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-VOLUME          .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00
-                .byte $02,$00,$06,$00,$08,$00,$08,$00,$08,$00,$08,$00,$06,$00,$02,$00
-                .byte $0E,$0B,$09,$08,$06,$06,$05,$04,$04,$03,$03,$03,$02,$02,$01,$01
-                .byte $08,$0B,$09,$08,$06,$06,$05,$04,$04,$03,$03,$03,$03,$02,$02,$02
-                .byte $02,$00,$06,$00,$08,$00,$08,$00,$08,$00,$08,$00,$06,$00,$02,$00
-                .byte $04,$07,$09,$09,$09,$09,$08,$07,$06,$04,$03,$02,$01,$01,$01,$01
-                .byte $04,$07,$09,$09,$09,$09,$08,$07,$06,$04,$03,$02,$01,$01,$01,$01
-                .byte $08,$04,$02,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $06,$06,$05,$05,$04,$03,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $02,$04,$06,$07,$08,$08,$08,$08,$08,$08,$04,$02,$00,$00,$00,$00
-                .byte $02,$04,$06,$06,$06,$06,$06,$06,$06,$06,$06,$06,$05,$04,$02,$00
-                .byte $A6,$AA,$A8,$AA,$A8,$A4,$A8,$AA,$A8,$AA,$A6,$AA,$A8,$A8,$AA,$A6
-                .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+L9800           .byte $07,$07,$07,$07,$07,$07,$07,$07
+                .byte $07,$E7,$07,$66,$67,$68,$07,$E5
+                .byte $E5,$E5,$E5,$E5,$E5,$07,$67,$07
+                .byte $07,$60,$61,$62,$07,$E0,$E4,$E2
+                .byte $07,$63,$64,$63,$07,$60,$61,$07
+                .byte $65,$65,$65,$65,$65,$65,$65,$65
+                .byte $07,$E1,$07,$63,$60,$62,$07,$E4
+                .byte $E1,$E0,$E1,$E3,$E3,$07,$65,$07
+                .byte $CD,$65,$65,$65,$65,$65,$1B,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $62,$69,$6A,$6A,$69,$6B,$6C,$61
+                .byte $07,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$3E,$78,$78,$78,$78,$78,$4E
+                .byte $CD,$65,$07,$3A,$65,$1B,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$3E,$78,$3B,$07,$78,$4E
+                .byte $CD,$65,$4F,$65,$1B,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$3E,$78,$4F,$78,$4E
+                .byte $CD,$65,$65,$1B,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$3E,$78,$78,$4E
+                .byte $CD,$65,$1B,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+VOLUME          .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$01,$00
+                .byte $02,$00,$06,$00,$08,$00,$08,$00
+                .byte $08,$00,$08,$00,$06,$00,$02,$00
+                .byte $0E,$0B,$09,$08,$06,$06,$05,$04
+                .byte $04,$03,$03,$03,$02,$02,$01,$01
+                .byte $08,$0B,$09,$08,$06,$06,$05,$04
+                .byte $04,$03,$03,$03,$03,$02,$02,$02
+                .byte $02,$00,$06,$00,$08,$00,$08,$00
+                .byte $08,$00,$08,$00,$06,$00,$02,$00
+                .byte $04,$07,$09,$09,$09,$09,$08,$07
+                .byte $06,$04,$03,$02,$01,$01,$01,$01
+                .byte $04,$07,$09,$09,$09,$09,$08,$07
+                .byte $06,$04,$03,$02,$01,$01,$01,$01
+                .byte $08,$04,$02,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $06,$06,$05,$05,$04,$03,$02,$01
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $02,$04,$06,$07,$08,$08,$08,$08
+                .byte $08,$08,$04,$02,$00,$00,$00,$00
+                .byte $02,$04,$06,$06,$06,$06,$06,$06
+                .byte $06,$06,$06,$06,$05,$04,$02,$00
+                .byte $A6,$AA,$A8,$AA,$A8,$A4,$A8,$AA
+                .byte $A8,$AA,$A6,$AA,$A8,$A8,$AA,$A6
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
 CACPOS          .byte $10,$F2,$25,$DE,$E7,$9F,$B6,$D2
                 .byte $1D,$1C,$1D,$1D,$1D,$1E,$1E,$1E
 HSBAS           .byte $8B,$8A,$89,$8E,$8D,$8C,$2B,$2A
@@ -562,22 +621,24 @@ FREQ            .byte $00,$00,$00,$00,$00,$00,$00,$00
 
 
 ;======================================
-;
+; End Frame
 ;======================================
 ENDFR           inc FRAME
+
                 lda PORTA
                 eor #$FF
-                beq LA7DE
+                beq _next1
 
                 lda #$00
                 sta ATRACT
-LA7DE           lda VCOUNT
-                cmp #$70
-                bcs LA7DE
 
-LA7E5           lda VCOUNT
+_next1          lda VCOUNT
                 cmp #$70
-                bcc LA7E5
+                bcs _next1
+
+_next2          lda VCOUNT
+                cmp #$70
+                bcc _next2
 
                 rts
 
@@ -611,35 +672,34 @@ FTABLE_ROM      .byte $00,$F3,$E6,$D9,$CC,$C1,$B6,$AD
                 .byte $6D,$06,$AD,$6D
                 .byte $06,$30,$9F
 
-
 ;--------------------------------------
 ;--------------------------------------
-                cmp #$10
-                bcs LAF9D
+LAF73           cmp #$10
+                bcs _2
 
                 cmp #$0A
                 bcs LAF55+1
 
                 nop
                 ldx WINNER
-                bne LAF93
+                bne _1
 
                 tay
                 lda #$07
                 sta L1FB4,Y
-LAF87           lda #$88
+_next1          lda #$88
                 sta AUDC4
                 lda #$20
                 sta AUDF4
                 bne LAF55+1
 
-LAF93           eor #$0F
+_1              eor #$0F
                 tay
                 lda #$07
                 sta L1FC4,Y
-                bne LAF87
+                bne _next1
 
-LAF9D           nop
+_2              nop
                 and #$0F
                 tax
                 lda Z0X,X
@@ -663,12 +723,12 @@ LAF9D           nop
                 jmp L4F87
 
                 ldx #$03
-LAFCC           lda L39F2,X
+_next2          lda L39F2,X
                 sta L1F9A,X
                 lda L39F6,X
                 sta L1FC2,X
                 dex
-                bpl LAFCC
+                bpl _next2
 
                 rts
 
@@ -680,12 +740,12 @@ LAFCC           lda L39F2,X
                 jmp L4FA4
 
                 ldx #$03
-LAFE9           lda L39F2,X
+_next3          lda L39F2,X
                 sta L5F9A,X
                 lda L39F6,X
                 sta L5FC2,X
                 dex
-                bpl LAFE9
+                bpl _next3
 
                 rts
 
@@ -702,24 +762,39 @@ LAFE9           lda L39F2,X
 ;--------------------------------------
 ;--------------------------------------
 
+LB500           .byte $0C,$0C,$1E,$00,$00,$00,$1E,$1E
+                .byte $1E,$1E,$12,$0C,$0C,$0C,$0C,$1E
+                .byte $00,$0C,$0C,$1E,$00,$00,$00,$1F
+                .byte $2C,$0C,$00,$1E,$12,$12,$02,$02
+                .byte $00,$0C,$0C,$1E,$00,$00,$00,$3E
+                .byte $0D,$0C,$00,$1E,$12,$12,$10,$10
+                .byte $00,$0C,$0C,$1E,$00,$00,$00,$1E
+                .byte $1E,$0E,$00,$1C,$14,$17,$11,$30
+                .byte $0C,$0C,$1E,$00,$00,$00,$2C,$3F
+                .byte $0D,$0D,$0C,$0C,$0C,$0C,$0E,$1A
+                .byte $0C,$0C,$1E,$00,$00,$00,$0D,$3F
+                .byte $2C,$2C,$0C,$0C,$0C,$0C,$1C,$16
+                .byte $00,$0C,$0C,$1E,$00,$00,$00,$1E
+                .byte $1E,$1C,$00,$0E,$0A,$3A,$22,$03
+                .byte $60,$70,$C0,$00,$00,$00,$00,$1E
+                .byte $1E,$0C,$00,$1E,$12,$12,$12,$12
 
-LB500           .byte $0C,$0C,$1E,$00,$00,$00,$1E,$1E,$1E,$1E,$12,$0C,$0C,$0C,$0C,$1E
-                .byte $00,$0C,$0C,$1E,$00,$00,$00,$1F,$2C,$0C,$00,$1E,$12,$12,$02,$02
-                .byte $00,$0C,$0C,$1E,$00,$00,$00,$3E,$0D,$0C,$00,$1E,$12,$12,$10,$10
-                .byte $00,$0C,$0C,$1E,$00,$00,$00,$1E,$1E,$0E,$00,$1C,$14,$17,$11,$30
-                .byte $0C,$0C,$1E,$00,$00,$00,$2C,$3F,$0D,$0D,$0C,$0C,$0C,$0C,$0E,$1A
-                .byte $0C,$0C,$1E,$00,$00,$00,$0D,$3F,$2C,$2C,$0C,$0C,$0C,$0C,$1C,$16
-                .byte $00,$0C,$0C,$1E,$00,$00,$00,$1E,$1E,$1C,$00,$0E,$0A,$3A,$22,$03
-                .byte $60,$70,$C0,$00,$00,$00,$00,$1E,$1E,$0C,$00,$1E,$12,$12,$12,$12
-
-FLESH           .byte $00,$00,$00,$C0,$C0,$00,$00,$00,$00,$00,$C0,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$C0,$C0,$00,$00,$00,$00,$C0,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$C0,$C0,$00,$00,$00,$00,$C0,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$C0,$C0,$40,$00,$00,$00,$C0,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$C0,$C0,$40,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$C0,$C0,$80,$00,$00,$00,$40,$80,$00,$00,$00,$00,$00
-                .byte $00,$00,$00,$00,$C0,$C0,$80,$00,$00,$00,$C0,$00,$00,$00,$00,$00
-                .byte $00,$00,$C0,$C0,$80,$C0,$00,$00,$00,$00,$C0,$00,$00,$00,$00,$00
+FLESH           .byte $00,$00,$00,$C0,$C0,$00,$00,$00
+                .byte $00,$00,$C0,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$C0,$C0,$00,$00
+                .byte $00,$00,$C0,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$C0,$C0,$00,$00
+                .byte $00,$00,$C0,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$C0,$C0,$40,$00
+                .byte $00,$00,$C0,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$C0,$C0,$40,$00,$00
+                .byte $00,$00,$00,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$C0,$C0,$80,$00,$00
+                .byte $00,$40,$80,$00,$00,$00,$00,$00
+                .byte $00,$00,$00,$00,$C0,$C0,$80,$00
+                .byte $00,$00,$C0,$00,$00,$00,$00,$00
+                .byte $00,$00,$C0,$C0,$80,$C0,$00,$00
+                .byte $00,$00,$C0,$00,$00,$00,$00,$00
 
 ;--------------------------------------
 ;--------------------------------------
@@ -751,38 +826,38 @@ LBB80_DLIST     .byte AEMPTY8           ; 8 scanlines
 ;--------------------------------------
 ;--------------------------------------
 
-                jsr LBF5B
+LBBC0           jsr LBF5B
 
                 lda STATCN
-                beq LBBCB
+                beq _1
 
                 jmp LBC5F
 
-LBBCB           lda RANDOM
+_1              lda RANDOM
                 and #$0F
-                bne LBC12
+                bne _XIT
 
                 lda MCNT4
-                bne LBC12
+                bne _XIT
 
                 lda RANDOM
                 cmp CANCRI
-                bcs LBC12
+                bcs _XIT
 
                 jsr LBED0
 
                 ldx #$00
                 lda (zpSCRL,X)
-                bne LBC12
+                bne _XIT
 
                 inc zpSCRL
                 lda (zpSCRL,X)
-                bne LBC12
+                bne _XIT
 
                 inc zpSCRL
                 lda (zpSCRL,X)
                 cmp #$07
-                beq LBC12
+                beq _XIT
 
                 dec zpSCRL
                 jsr LBF3B
@@ -802,41 +877,41 @@ LBBCB           lda RANDOM
                 jsr LBF1D
 
                 cmp #$10
-                bcs LBC13
+                bcs _2
 
-LBC12           rts
+_XIT            rts
 
-LBC13           lda zpYP1
+_2              lda zpYP1
                 sec
                 sbc zpYP2
                 jsr LBF1D
 
                 cmp #$10
-                bcs LBC20
+                bcs _3
 
                 rts
 
-LBC20           lda zpXP1
+_3              lda zpXP1
                 sec
                 sbc zpXP0
                 jsr LBF1D
 
                 cmp #$0C
-                bcs LBC2D
+                bcs _4
 
                 rts
 
-LBC2D           lda zpXP1
+_4              lda zpXP1
                 sec
                 sbc zpXP2
                 jsr LBF1D
 
                 cmp #$0C
-                bcs LBC3A
+                bcs _5
 
                 rts
 
-LBC3A           ldx #$FF
+_5              ldx #$FF
                 stx FRAMM
                 lda #$01
                 sta STATCN
@@ -852,18 +927,22 @@ LBC3A           ldx #$FF
                 sta DUR4
                 lda #$A0
                 sta AUD4
-LBC5E           rts
+_XIT2           rts
 
-LBC5F           bpl LBC64
+
+;--------------------------------------
+;
+;--------------------------------------
+LBC5F           bpl _1
 
                 jmp LBCF0
 
-LBC64           lda CNTYPE
+_1              lda CNTYPE
                 cmp #$FF
-                bne LBC85
+                bne _2
 
                 lda MCNT4
-                bne LBC5E
+                bne LBBC0._XIT2
 
                 sta CNTYPE
                 jsr LBEBD
@@ -878,18 +957,18 @@ LBC64           lda CNTYPE
 
                 rts
 
-LBC85           lda P1PL
+_2              lda P1PL
                 and #$05
                 bne LBCA5
 
                 lda zpXP1
                 cmp #$2E
-                bcc LBC96
+                bcc _3
 
                 cmp #$CB
-                bcc LBCA4
+                bcc _XIT
 
-LBC96           jsr LBF0D
+_3              jsr LBF0D
                 jsr LBE26
 
                 ldx #$02
@@ -897,20 +976,24 @@ LBC96           jsr LBF0D
 
                 jmp LBD99
 
-LBCA4           rts
+_XIT            rts
 
+
+;--------------------------------------
+;
+;--------------------------------------
 LBCA5           cmp #$05
-                bne LBCB4
+                bne _1
 
                 ldy STUK0
-                bne LBCB4
+                bne _1
 
                 ldy STUK2
-                bne LBCB4
+                bne _1
 
                 rts
 
-LBCB4           and #$01
+_1              and #$01
                 beq LBCD0
 
                 ldy STUK0
@@ -922,38 +1005,50 @@ LBCB4           and #$01
                 lda #$80
                 sta STATCN
                 lda CNTYPE
-                beq LBCCF
+                beq _XIT
 
                 jsr LBEAC
 
-LBCCF           rts
+_XIT            rts
 
+
+;--------------------------------------
+;
+;--------------------------------------
 LBCD0           lda P1PL
                 and #$04
-                beq LBCE1
+                beq _XIT
 
                 lda STUK2
-                bne LBCE1
+                bne _XIT
 
                 lda STRIG1
                 bne LBCE2
 
-LBCE1           rts
+_XIT            rts
 
+
+;--------------------------------------
+;
+;--------------------------------------
 LBCE2           lda #$81
                 sta STATCN
                 lda CNTYPE
-                beq LBCEF
+                beq _XIT
 
                 jsr LBEAC
 
-LBCEF           rts
+_XIT            rts
 
+
+;--------------------------------------
+;
+;--------------------------------------
 LBCF0           jsr LBE30
 
                 lda STATCN
                 and #$01
-                bne LBD38
+                bne _2
 
                 jsr LBF0D
                 jsr LBE26
@@ -969,26 +1064,26 @@ LBCF0           jsr LBE30
                 sta zpXP1
                 sta HPOSP1
                 lda STUK0
-                beq LBD20
+                beq _1
 
                 ldx #$00
                 jsr LBDCB
 
                 jmp LBD99
 
-LBD20           lda STRIG0
+_1              lda STRIG0
                 bne LBD99
 
                 ldx #$00
-                jmp LBD65
+                jmp _4
 
-LBD2A           inc SCOR0
+_next1          inc SCOR0
                 ldx SCOR0
                 lda #$88
                 sta L1FB3,X
                 jmp LBDAD
 
-LBD38           jsr LBF0D
+_2              jsr LBF0D
                 jsr LBE26
 
                 lda zpYP2
@@ -1002,54 +1097,63 @@ LBD38           jsr LBF0D
                 sta zpXP1
                 sta HPOSP1
                 lda STUK2
-                beq LBD5E
+                beq _3
 
                 ldx #$04
                 jsr LBDCB
 
                 jmp LBD99
 
-LBD5E           lda STRIG1
+_3              lda STRIG1
                 bne LBD99
 
                 ldx #$01
-LBD65           lda #$01
+_4              lda #$01
                 sta TRG0FL,X
                 lda GAMENO
-                bne LBD88
+                bne _6
 
                 lda CNTYPE
-                bne LBD88
+                bne _6
 
                 lda zpYP1
                 cmp #$BF
-                bcc LBD88
+                bcc _6
 
                 lda zpXP1
                 cmp #$3B
-                bcs LBD82
+                bcs _5
 
-                bcc LBD2A
+                bcc _next1
 
-LBD82           cmp #$BE
-                bcc LBD88
+_5              cmp #$BE
+                bcc _6
 
                 bcs LBD9D
 
-LBD88           lda #$01
+_6              lda #$01
                 sta STATCN
                 txa
-                beq LBD96
+                beq _7
 
                 jsr LBF25
 
                 jmp LBD99
 
-LBD96           jsr LBF30
+_7              jsr LBF30
+
+
+;--------------------------------------
+;
+;--------------------------------------
 LBD99           jsr LBEFB
 
                 rts
 
+
+;--------------------------------------
+;
+;--------------------------------------
 LBD9D           inc SCOR2
                 lda SCOR2
                 eor #$FF
@@ -1057,6 +1161,11 @@ LBD9D           inc SCOR2
                 tax
                 lda #$9F
                 sta L1FC5,X
+
+
+;--------------------------------------
+;
+;--------------------------------------
 LBDAD           jsr LBF0D
                 jsr LBE26
 
@@ -1088,29 +1197,37 @@ LBDD5           jsr LBE04
 
                 jmp LBDE3
 
+
+;--------------------------------------
+;
+;--------------------------------------
 LBDDB           lda RANDOM
                 bpl LBE04
 
                 jmp LBDE3
 
+
+;--------------------------------------
+;
+;--------------------------------------
 LBDE3           lda RANDOM
-                bpl LBDF5
+                bpl _1
 
                 lda zpYP0,X
                 adc #$18
                 cmp #$B8
-                bcc LBDFF
+                bcc _2
 
                 sbc #$28
-                jmp LBDFF
+                jmp _2
 
-LBDF5           lda zpYP0,X
+_1              lda zpYP0,X
                 sbc #$10
                 cmp #$28
-                bcs LBDFF
+                bcs _2
 
                 adc #$28
-LBDFF           sta zpYP1
+_2              sta zpYP1
                 sta zpYP
                 rts
 
@@ -1119,23 +1236,23 @@ LBDFF           sta zpYP1
 ;
 ;======================================
 LBE04           lda RANDOM
-                bpl LBE16
+                bpl _1
 
                 lda zpXP0,X
                 adc #$0C
                 cmp #$C0
-                bcc LBE20
+                bcc _2
 
                 sbc #$15
-                jmp LBE20
+                jmp _2
 
-LBE16           lda zpXP0,X
+_1              lda zpXP0,X
                 sbc #$09
                 cmp #$34
-                bcs LBE20
+                bcs _2
 
                 adc #$15
-LBE20           sta zpXP1
+_2              sta zpXP1
                 sta HPOSP1
                 rts
 
@@ -1145,9 +1262,9 @@ LBE20           sta zpXP1
 ;======================================
 LBE26           ldy #$0C
                 lda #$00
-LBE2A           sta (zpYP),Y
+_next1          sta (zpYP),Y
                 dey
-                bpl LBE2A
+                bpl _next1
 
                 rts
 
@@ -1157,14 +1274,14 @@ LBE2A           sta (zpYP),Y
 ;======================================
 LBE30           lda STATCN
                 cmp #$02
-                bcc LBE66
+                bcc _XIT
 
                 lda CNTYPE
-                beq LBE67
+                beq _1
 
                 lda M1PL
                 and #$02
-                beq LBE66
+                beq _XIT
 
                 lda #$FF
                 sta CNTYPE
@@ -1183,11 +1300,11 @@ LBE30           lda STATCN
                 sta zpXP1
                 pla
                 pla
-LBE66           rts
+_XIT            rts
 
-LBE67           lda M1PL
+_1              lda M1PL
                 and #$02
-                beq LBE66
+                beq _XIT
 
                 pla
                 pla
@@ -1197,25 +1314,25 @@ LBE67           lda M1PL
                 sta MCNT4
                 lda STATCN
                 cmp #$80
-                beq LBE8F
+                beq _2
 
                 ldy #$0A
                 lda #$7D
-LBE85           sta ScreenFooter+25,Y
+_next1          sta ScreenFooter+25,Y
                 dey
-                bne LBE85
+                bne _next1
 
                 ldx #$01
-                bne LBE9B
+                bne _3
 
-LBE8F           ldy #$0A
+_2              ldy #$0A
                 lda #$7C
-LBE93           sta ScreenFooter+3,Y
+_next2          sta ScreenFooter+3,Y
                 dey
-                bne LBE93
+                bne _next2
 
                 ldx #$00
-LBE9B           lda #$0A
+_3              lda #$0A
                 sta NUMBL0,X
 
                 jsr LBF0D
@@ -1261,20 +1378,20 @@ LBED0           lda RANDOM
                 lda RANDOM
                 sta zpSCRL
                 cmp #$60
-                bcs LBEE4
+                bcs _1
 
-                bcc LBEEA
+                bcc _next1
 
-LBEE4           lda zpSCRH
+_1              lda zpSCRH
                 cmp #$1F
                 beq LBED0
 
-LBEEA           lda RANDOM
+_next1          lda RANDOM
                 cmp #$C0
-                bcs LBEEA
+                bcs _next1
 
                 cmp #$30
-                bcc LBEEA
+                bcc _next1
 
                 tay
                 sty zpSCRH+4
@@ -1290,11 +1407,11 @@ LBEFB           lda #$07
                 clc
                 adc CNTYPE
                 tax
-LBF03           lda STAMP_CANS,X
+_next1          lda STAMP_CANS,X
                 sta (zpYP),Y
                 dex
                 dey
-                bpl LBF03
+                bpl _next1
 
                 rts
 
@@ -1313,14 +1430,14 @@ LBF0D           lda #$0D
 
 
 ;======================================
-;
+; Absolute Value
 ;======================================
-LBF1D           bpl LBF24
+LBF1D           bpl _XIT
 
                 eor #$FF
                 clc
                 adc #$01
-LBF24           rts
+_XIT            rts
 
 
 ;======================================
@@ -1352,20 +1469,20 @@ LBF3B           lda zpSCRH
                 tax
                 lda zpSCRL
                 ldy #$02
-                bne LBF4C
+                bne _1
 
-LBF47           iny
+_next1          iny
                 sbc #$28
-                bcs LBF47
+                bcs _next1
 
-LBF4C           dex
+_1              dex
                 sec
-                bne LBF47
+                bne _next1
 
-LBF50           iny
+_next2          iny
                 sbc #$28
                 cmp #$40
-                bcs LBF50
+                bcs _next2
 
                 sec
                 sbc #$0D
@@ -1377,29 +1494,29 @@ LBF50           iny
 ;======================================
 LBF5B           lda FRAME
                 and #$03
-                bne LBF73
+                bne _3
 
                 lda PCOLR1
                 ldx STATCN
-                bmi LBF6E
+                bmi _1
 
                 eor #$02
-                bne LBF70
+                bne _2
 
-LBF6E           ora #$02
-LBF70           sta PCOLR1
-LBF73           lda STATCN
-                bpl LBFC2
+_1              ora #$02
+_2              sta PCOLR1
+_3              lda STATCN
+                bpl _7
 
                 lda CNTYPE
-                beq LBF93
+                beq _4
 
                 cmp #$FF
-                beq LBFCA
+                beq _8
 
                 lda FRAME
                 and #$08
-                beq LBFCA
+                beq _8
 
                 lda #$89
                 sta HPOSM1
@@ -1407,37 +1524,37 @@ LBF73           lda STATCN
                 sta scrnL02C24
                 rts
 
-LBF93           lda FRAME
+_4              lda FRAME
                 and #$08
-                beq LBFC2
+                beq _7
 
                 lda GAMENO
-                bne LBFBC
+                bne _6
 
                 lda STATCN
                 cmp #$81
-                beq LBFB2
+                beq _5
 
                 ldx #$1D
                 stx L1F8C
                 lda BONUS0
-                beq LBFC1
+                beq _XIT
 
-                bne LBFBC
+                bne _6
 
-LBFB2           ldx #$1E
+_5              ldx #$1E
                 stx L1FAB
                 lda BONUS2
-                beq LBFC1
+                beq _XIT
 
-LBFBC           lda #$7F
+_6              lda #$7F
                 sta HPOSM1
-LBFC1           rts
+_XIT            rts
 
-LBFC2           lda #$07
+_7              lda #$07
                 sta L1F8C
                 sta L1FAB
-LBFCA           lda #$00
+_8              lda #$00
                 sta scrnL02C24
                 rts
 
@@ -1453,7 +1570,9 @@ LBFD0           .byte $07,$66,$67,$68,$07,$66,$67,$67
 
 
 ;--------------------------------------
+;--------------------------------------
 ; Cartridge Initialization
+;--------------------------------------
 ;--------------------------------------
 CART_INIT       rts
 
