@@ -4,35 +4,35 @@
 CANROU          jsr FLASH
 
                 lda STATCN
-                beq _QNUT
+                beq _1
 
                 jmp _PRESNT
 
-_QNUT           lda RANDOM
+_1              lda RANDOM
                 and #$0F                ; CHECK 4/SEC
-                bne _QCRTS
+                bne _XIT1
 
                 lda MCNT4
-                bne _QCRTS
+                bne _XIT1
 
                 lda RANDOM
                 cmp CANCRI
-                bcs _QCRTS
+                bcs _XIT1
 
                 jsr RANCAN              ; NEAR
 
                 ldx #$00
                 lda (zpSCRL,X)
-                bne _QCRTS
+                bne _XIT1
 
                 inc zpSCRL
                 lda (zpSCRL,X)
-                bne _QCRTS
+                bne _XIT1
 
                 inc zpSCRL
                 lda (zpSCRL,X)
                 cmp #$07
-                beq _QCRTS
+                beq _XIT1
 
                 dec zpSCRL
                 jsr SCTOXY_2
@@ -52,41 +52,41 @@ _QNUT           lda RANDOM
                 jsr ABSVAL
 
                 cmp #$10                ; <F TOO CLOSE
-                bcs _QC2
+                bcs _2
 
-_QCRTS          rts
+_XIT1           rts
 
-_QC2            lda zpYP1
+_2              lda zpYP1
                 sec
                 sbc zpYP2
                 jsr ABSVAL
 
                 cmp #$10
-                bcs _QC3
+                bcs _3
 
                 rts
 
-_QC3            lda zpXP1
+_3              lda zpXP1
                 sec
                 sbc zpXP0
                 jsr ABSVAL
 
                 cmp #$0C
-                bcs _QC4
+                bcs _4
 
                 rts
 
-_QC4            lda zpXP1
+_4              lda zpXP1
                 sec
                 sbc zpXP2
                 jsr ABSVAL
 
                 cmp #$0C
-                bcs _PLCAN
+                bcs _5
 
                 rts
 
-_PLCAN          ldx #$FF
+_5              ldx #$FF
                 stx FRAMM
                 lda #$01
                 sta STATCN
@@ -101,7 +101,7 @@ _PLCAN          ldx #$FF
                 sta DUR4
                 lda #$A0
                 sta AUD4
-_CRTS           rts
+_XIT2           rts
 
 _PRESNT         bpl _UNOWND
 
@@ -112,7 +112,7 @@ _UNOWND         lda CNTYPE
                 bne _NOWAIT
 
                 lda MCNT4
-                bne _CRTS
+                bne _XIT2
 
                 sta CNTYPE
                 jsr DRSTOR

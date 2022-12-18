@@ -1,3 +1,4 @@
+
 ;======================================
 ; Bullet Routine
 ;======================================
@@ -14,38 +15,38 @@ BUL             .proc
 ;======================================
 BUL0            .proc
                 lda STBUL0
-                bne _Q64
+                bne _1
 
                 rts
 
-_Q64            lda M0PL
+_1              lda M0PL
                 and #$04
-                bne _COWHT0
+                bne _2
 
                 lda zpXP2
                 clc
                 adc #$02
                 cmp XM0
-                bcs _Q65
+                bcs _4
 
                 adc #$03
                 cmp XM0
-                bcc _Q65
+                bcc _4
 
                 lda zpYP2
                 cmp YM0
-                bcs _Q65
+                bcs _4
 
                 adc #$0D
                 cmp YM0
-                bcc _Q65
+                bcc _4
 
-_COWHT0         lda #$00
+_2              lda #$00
                 sta STBUL0
                 jsr ERSM0
 
                 lda STUK2
-                bmi _C0RTS
+                bmi _3
 
                 lda #$80+$3F
                 sta STUK2
@@ -53,21 +54,21 @@ _COWHT0         lda #$00
                 sta DUR3
                 lda #$A0
                 sta AUD3
-_C0RTS          rts
+_3              rts
 
-_Q65            lda M0PF
-                bne _GRAY0
+_4              lda M0PF
+                bne _5
 
                 jmp Q70
 
-_GRAY0          and #$0B
-                beq _QB0
+_5              and #$0B
+                beq _6
 
                 ldx #$00
                 stx BHITFL
                 jmp HITROU
 
-_QB0            lda YM0
+_6              lda YM0
                 cmp #$50
                 bcs Q70
 
@@ -76,13 +77,13 @@ _QB0            lda YM0
 
                 lda XM0
                 cmp #$48
-                bcc _AREA0
+                bcc _7
 
                 cmp #$B0
                 bcc Q70
 
-_AREA0          lda STBUL0
-                bmi _LFTRT0
+_7              lda STBUL0
+                bmi _9
 
                 cmp #$01
                 beq Q70
@@ -91,33 +92,33 @@ _AREA0          lda STBUL0
 
                 lda XM0
                 cmp #$7C
-                bcc _UP2RT0
+                bcc _8
 
                 lda #$82
                 sta STBUL0
                 bne BOUNC0
 
-_UP2RT0         lda #$81
+_8              lda #$81
                 sta STBUL0
                 bne BOUNC0
 
-_LFTRT0         lda XM0
+_9              lda XM0
                 cmp #$7C
-                bcc _LEFSD0
+                bcc _10
 
                 lda STBUL0
                 cmp #$81
-                beq _BNCDN0
+                beq _11
 
                 jmp Q70
 
-_LEFSD0         lda STBUL0
+_10             lda STBUL0
                 cmp #$82
-                beq _BNCDN0
+                beq _11
 
                 jmp Q70
 
-_BNCDN0         lda #$01
+_11             lda #$01
                 sta STBUL0
                 bne BOUNC0
 
@@ -133,7 +134,7 @@ Q70             .proc
                 bmi SIDEW0
 
                 lsr A
-                bcc _TRUP0
+                bcc _1
 
                 jsr ERSM0
 
@@ -141,20 +142,20 @@ Q70             .proc
                 clc
                 adc #$05
                 cmp #$DF
-                bcs _OFFSC0
+                bcs _2
 
                 sta YM0
                 jsr REDRM0
 
                 rts
 
-_TRUP0          jsr ERSM0
+_1              jsr ERSM0
 
                 lda YM0
                 sec
                 sbc #$05
                 cmp #$08
-                bcc _OFFSC0
+                bcc _2
 
                 sta YM0
                 jsr REDRM0
@@ -163,7 +164,7 @@ _TRUP0          jsr ERSM0
 
 _OFFSC1         jsr ERSM0
 
-_OFFSC0         lda #$00
+_2              lda #$00
                 sta STBUL0
                 rts
                 .endproc
@@ -174,7 +175,7 @@ _OFFSC0         lda #$00
 ;--------------------------------------
 SIDEW0          .proc
                 lsr A
-                bcc _TRLEF0
+                bcc _1
 
                 lda XM0
                 clc
@@ -186,7 +187,7 @@ SIDEW0          .proc
                 sta HPOSM0
                 rts
 
-_TRLEF0         lda XM0
+_1              lda XM0
                 sec
                 sbc #$03
                 cmp #$28
@@ -204,12 +205,13 @@ _TRLEF0         lda XM0
 ERSM0           .proc
                 ldx #$02
                 ldy YM0
-_ERLP0          lda MBAS6,Y
+_next1          lda MBAS6,Y
                 and #$FC
                 sta MBAS6,Y
+
                 iny
                 dex
-                bpl _ERLP0
+                bpl _next1
 
                 rts
                 .endproc
@@ -221,12 +223,13 @@ _ERLP0          lda MBAS6,Y
 REDRM0          .proc
                 ldx #$02
                 ldy YM0
-_REDLP0         lda MBAS6,Y
+_next1          lda MBAS6,Y
                 ora #$02
                 sta MBAS6,Y
+
                 iny
                 dex
-                bpl _REDLP0
+                bpl _next1
 
                 rts
                 .endproc
@@ -237,38 +240,38 @@ _REDLP0         lda MBAS6,Y
 ;======================================
 BUL2            .proc
                 lda STBUL2
-                bne _W64
+                bne _1
 
                 rts
 
-_W64            lda M2PL
+_1              lda M2PL
                 and #$01
-                bne _COWHT2
+                bne _2
 
                 lda zpXP0
                 clc
                 adc #$02
                 cmp XM2
-                bcs _W65
+                bcs _3
 
                 adc #$03
                 cmp XM2
-                bcc _W65
+                bcc _3
 
                 lda zpYP0
                 cmp YM2
-                bcs _W65
+                bcs _3
 
                 adc #$0D
                 cmp YM2
-                bcc _W65
+                bcc _3
 
-_COWHT2         lda #$00
+_2              lda #$00
                 sta STBUL2
                 jsr ERSM2
 
                 lda STUK0
-                bmi _C2RTS
+                bmi _XIT1
 
                 lda #$80+$3F
                 sta STUK0
@@ -276,21 +279,22 @@ _COWHT2         lda #$00
                 sta DUR1
                 lda #$A0
                 sta AUD1
-_C2RTS          rts
 
-_W65            lda M2PF
-                bne _GRA2
+_XIT1           rts
+
+_3              lda M2PF
+                bne _4
 
                 jmp W70
 
-_GRA2           and #$0B
-                beq _QB2
+_4              and #$0B
+                beq _5
 
                 ldx #$02
                 stx BHITFL
                 jmp HITROU
 
-_QB2            lda YM2
+_5              lda YM2
                 cmp #$50
                 bcs W70
 
@@ -299,13 +303,13 @@ _QB2            lda YM2
 
                 lda XM2
                 cmp #$48
-                bcc _AREA2
+                bcc _6
 
                 cmp #$B0
                 bcc W70
 
-_AREA2          lda STBUL2
-                bmi _LFTRT2
+_6              lda STBUL2
+                bmi _8
 
                 cmp #$01
                 beq W70
@@ -314,33 +318,33 @@ _AREA2          lda STBUL2
 
                 lda XM2
                 cmp #$7C
-                bcc _UP2RT2
+                bcc _7
 
                 lda #$82
                 sta STBUL2
                 bne BOUNC2
 
-_UP2RT2         lda #$81
+_7              lda #$81
                 sta STBUL2
                 bne BOUNC2
 
-_LFTRT2         lda XM2
+_8              lda XM2
                 cmp #$7C
-                bcc _LEFSD2
+                bcc _9
 
                 lda STBUL2
                 cmp #$81
-                beq _BNCDN2
+                beq _10
 
                 jmp W70
 
-_LEFSD2         lda STBUL2
+_9              lda STBUL2
                 cmp #$82
-                beq _BNCDN2
+                beq _10
 
                 jmp W70
 
-_BNCDN2         lda #$01
+_10             lda #$01
                 sta STBUL2
                 bne BOUNC2
 
@@ -363,7 +367,7 @@ W70             .proc
                 bmi SIDEW2
 
                 lsr A
-                bcc _TRUP2
+                bcc _1
 
                 jsr ERSM2
 
@@ -371,20 +375,20 @@ W70             .proc
                 clc
                 adc #$05
                 cmp #$DF
-                bcs _OFFSC2
+                bcs _2
 
                 sta YM2
                 jsr REDRM2
 
                 rts
 
-_TRUP2          jsr ERSM2
+_1              jsr ERSM2
 
                 lda YM2
                 sec
                 sbc #$05
                 cmp #$08
-                bcc _OFFSC2
+                bcc _2
 
                 sta YM2
                 jsr REDRM2
@@ -393,7 +397,7 @@ _TRUP2          jsr ERSM2
 
 _OFFSC3         jsr ERSM2
 
-_OFFSC2         lda #$00
+_2              lda #$00
                 sta STBUL2
                 rts
                 .endproc
@@ -404,7 +408,7 @@ _OFFSC2         lda #$00
 ;--------------------------------------
 SIDEW2          .proc
                 lsr A
-                bcc _TRLEF2
+                bcc _1
 
                 lda XM2
                 clc
@@ -416,7 +420,7 @@ SIDEW2          .proc
                 sta HPOSM2
                 rts
 
-_TRLEF2         lda XM2
+_1              lda XM2
                 sec
                 sbc #$03
                 cmp #$28
@@ -434,12 +438,13 @@ _TRLEF2         lda XM2
 ERSM2           .proc
                 ldx #$02
                 ldy YM2
-_ERLP2          lda MBAS6,Y
+_next1          lda MBAS6,Y
                 and #$CF
                 sta MBAS6,Y
+
                 iny
                 dex
-                bpl _ERLP2
+                bpl _next1
 
                 rts
                 .endproc
@@ -451,12 +456,13 @@ _ERLP2          lda MBAS6,Y
 REDRM2          .proc
                 ldx #$02
                 ldy YM2
-_REDLP2         lda MBAS6,Y
+_next1          lda MBAS6,Y
                 ora #$20
                 sta MBAS6,Y
+
                 iny
                 dex
-                bpl _REDLP2
+                bpl _next1
 
                 rts
                 .endproc
@@ -467,16 +473,16 @@ _REDLP2         lda MBAS6,Y
 ;--------------------------------------
 HITROU          .proc
                 and #$03
-                bne _QHR1
+                bne _1
 
                 jmp IGNOR
 
-_QHR1           cmp #$03
-                bne _QHR2
+_1              cmp #$03
+                bne _2
 
                 jmp IGNOR
 
-_QHR2           and #$01
+_2              and #$01
                 eor #$01
                 sta HITCOL
                 ldy BHITFL              ; TRANSFORM M COOR
@@ -495,68 +501,68 @@ _QHR2           and #$01
                 sta YMS
 
                 ldy #$0F
-_TXMCH          lda Z0X,Y
-                beq _NXSNKX
+_next1          lda Z0X,Y
+                beq _next2
 
                 cmp XMS
-                beq _CHEKY
+                beq _3
 
-_NXSNKX         dey
+_next2          dey
                 bmi _TRYY
-                bpl _TXMCH              ; UNC
+                bpl _next1              ; UNC
 
-_CHEKY          lda Z0Y,Y
+_3              lda Z0Y,Y
                 sec
                 sbc YMS
                 beq _TCOLOR
 
                 cmp #$FF
-                bne _QHR3
+                bne _4
 
                 lda DIRPZ0,Y
                 cmp #$01
                 beq _TCOLOR
-                bne _NXSNKX             ; UNC
+                bne _next2             ; UNC
 
-_QHR3           cmp #$01
-                bne _NXSNKX
+_4              cmp #$01
+                bne _next2
 
                 lda DIRPZ0,Y
                 cmp #$81
                 beq _TCOLOR
-                bne _NXSNKX             ; UNC
+                bne _next2             ; UNC
 
 _TRYY           ldy #$0F
-_TYMCH          lda Z0Y,Y
-                beq _NXSNKY
+_next3          lda Z0Y,Y
+                beq _next4
 
                 cmp YMS
                 beq _CHEKX
 
-_NXSNKY         dey
-                bmi _FAIL2F
-                bpl _TYMCH              ; UNC
+_next4          dey
+                bmi _6
+                bpl _next3              ; UNC
 
 _CHEKX          lda Z0X,Y
                 sec
                 sbc XMS
                 cmp #$FF
-                bne _QHR4
+                bne _5
 
                 lda DIRPZ0,Y
                 cmp #$00
                 beq _TCOLOR
-                bne _NXSNKY             ; UNC
+                bne _next4             ; UNC
 
-_QHR4           cmp #$01
-                bne _NXSNKY
+_5              cmp #$01
+                bne _next4
 
                 lda DIRPZ0,Y
                 cmp #$80
                 beq _TCOLOR
-                bne _NXSNKY             ; UNC
+                bne _next4             ; UNC
 
-_FAIL2F         jmp IGNOR
+_6              jmp IGNOR
 
 _TCOLOR         lda SCRLZ0,Y            ; NOW Y=SNK# HIT
                 sta zpSCRL
@@ -588,7 +594,7 @@ _TCOLOR         lda SCRLZ0,Y            ; NOW Y=SNK# HIT
                 pla
                 clc
                 adc #$20
-                bne _ENCONV             ; UNC
+                bne _7                  ; UNC
 
 _TESTUM         ldx BHITFL
                 beq ASBEF
@@ -602,7 +608,7 @@ _TESTUM         ldx BHITFL
                 pla
                 sec
                 sbc #$20
-_ENCONV         ldx #$00
+_7              ldx #$00
                 sta (zpSCRL,X)
                 beq HITDUN
 
@@ -644,11 +650,11 @@ ASBEF           .proc
 ;--------------------------------------
 HITDUN          .proc
                 lda BHITFL
-                beq _PL0DUN
+                beq _1
 
                 jmp W70._OFFSC3         ; LEAVE BUL2
 
-_PL0DUN         jmp Q70._OFFSC1         ; LEAVE BUL0
+_1              jmp Q70._OFFSC1         ; LEAVE BUL0
 
                 .endproc
 
@@ -658,11 +664,11 @@ _PL0DUN         jmp Q70._OFFSC1         ; LEAVE BUL0
 ;--------------------------------------
 IGNOR           .proc
                 lda BHITFL
-                beq _PL0IG
+                beq _1
 
                 jmp W70
 
-_PL0IG          jmp Q70
+_1              jmp Q70
 
                 .endproc
 
