@@ -1,3 +1,4 @@
+
 ;======================================
 ;
 ;======================================
@@ -114,7 +115,7 @@ _GOMOVE         lda DIRZF
                 lda DIRP
                 sta DIRZF
                 ldx #$02
-                jsr FINDSC              ; OLDSC
+_LA3EE          jsr FINDSC              ; OLDSC
 
                 lda #$00
                 sta (zpSCRL,X)          ; ERASE OLDZ
@@ -257,11 +258,11 @@ FNEWDR          .proc
                 bcc _QSS1               ; FOR SNK OR TMB
 
                 iny
-_QSS1           lda RANDOM
+_QSS1           ;--lda RANDOM
                 cmp CHANC0,Y            ; Y=0,1
                 bcs _Q19
 
-                lda RANDOM
+                ;--lda RANDOM
                 and #$81
                 sta DIRZF
                 rts
@@ -331,7 +332,7 @@ _XBIGLP         asl YDIF
 
 _Q18            ldy PNUM
                 lda PROB
-                cmp RANDOM
+                ;--cmp RANDOM
                 bcc _FDIRX
 
                 lda zpYP0,Y
@@ -388,13 +389,13 @@ SN5V2           .proc
                 beq _QSN1
 
                 lda #$20                ; SN7,EAT
-                sta AUD2
+                ;--sta AUD2
                 lda #$70
                 sta DUR2
                 rts
 
 _QSN1           lda #$A0                ; SNK
-                sta AUD2                ; TO TUM
+                ;--sta AUD2                ; TO TUM
                 lda #$50
                 sta DUR2
                 ldx #$00
@@ -413,13 +414,13 @@ SN6V4           .proc
                 beq _QSN2
 
                 lda #$20                ; SN7,EAT
-                sta AUD4
+                ;--sta AUD4
                 lda #$70
                 sta DUR4
                 rts
 
 _QSN2           lda #$A0                ; TUM
-                sta AUD4                ; TO SNK
+                ;--sta AUD4                ; TO SNK
                 lda #$60
                 sta DUR4
                 ldx #$02
@@ -499,7 +500,7 @@ PLUS_           .proc
                 rts
                 .endproc
 
-;--------------------------------------
-;--------------------------------------
 
+;--------------------------------------
                 .fill 2,$00
+;--------------------------------------

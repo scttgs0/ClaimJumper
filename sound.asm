@@ -1,12 +1,13 @@
+
 ;======================================
 ;
 ;======================================
 SOUND           .proc
-                sta HITCLR
+                ;--sta HITCLR
                 lda #$00
-                sta AUDCTL
+                ;--sta AUDCTL
                 lda #$03
-                sta SKCTL
+                ;--sta SKCTL
                 inc FRAMM
                 ldx #$06
 _NXVOI          lda MCNT1,X
@@ -25,7 +26,7 @@ _NXVOI          lda MCNT1,X
 
                 dec VOL1,X
 _STOVOL         lda VOL1,X
-                sta AUDC1,X
+                ;--sta AUDC1,X
                 jmp _DECVOI
 
 _NEXNOT         dec NoteNumber,X
@@ -36,7 +37,7 @@ _NEXNOT         dec NoteNumber,X
                 lda VOLUME,Y
                 sta VOL1,X
                 lda FREQ,Y
-                sta AUDF1,X
+                ;--sta AUDF1,X
                 jmp _STOVOL
 
 _ZVOL           lda #$00
@@ -48,10 +49,10 @@ _STNDRD         ldy DUR1,X
                 beq _NOVOI
 
                 lda VOLUME,Y
-                ora AUD1,X
-                sta AUDC1,X
+                ;--ora AUD1,X
+                ;--sta AUDC1,X
                 lda FREQ,Y
-                sta AUDF1,X
+                ;--sta AUDF1,X
                 inc DUR1,X
                 lda DUR1,X
                 cmp #$A0
@@ -67,7 +68,7 @@ _DECVOI         dex
                 jmp STCOL._LAB02_BAD
 
 _NOVOI          lda #$00
-                sta AUDC1,X
+                ;--sta AUDC1,X
                 beq _DECVOI
 
 _ZERODR         lda #$00

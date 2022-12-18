@@ -1,3 +1,4 @@
+
 ;======================================
 ;
 ;======================================
@@ -8,14 +9,14 @@ CANROU          jsr FLASH
 
                 jmp _PRESNT
 
-_1              lda RANDOM
+_1              ;--lda RANDOM
                 and #$0F                ; CHECK 4/SEC
                 bne _XIT1
 
                 lda MCNT4
                 bne _XIT1
 
-                lda RANDOM
+                ;--lda RANDOM
                 cmp CANCRI
                 bcs _XIT1
 
@@ -93,14 +94,14 @@ _5              ldx #$FF
                 lda #$08
                 sta CNTYPE
                 lda #$2C
-                sta PCOLR1
+                ;--sta PCOLR1
                 jsr SETCAN
                 jsr DRAWCN
 
                 lda #$BC
                 sta DUR4
                 lda #$A0
-                sta AUD4
+                ;--sta AUD4
 _XIT2           rts
 
 _PRESNT         bpl _UNOWND
@@ -126,7 +127,7 @@ _UNOWND         lda CNTYPE
 
                 rts
 
-_NOWAIT         lda P1PL
+_NOWAIT         ;--lda P1PL
                 and #$05
                 bne _CANCOL
 
@@ -164,7 +165,7 @@ _COL1           and #$01                ; P1 COLL?
                 ldy STUK0
                 bne _COLP2
 
-                ldy STRIG0
+                ;--ldy STRIG0
                 beq _COLP2
 
                 lda #$80
@@ -176,14 +177,14 @@ _COL1           and #$01                ; P1 COLL?
 
 _ACQBL0         rts
 
-_COLP2          lda P1PL
+_COLP2          ;--lda P1PL
                 and #$04
                 beq _QC65
 
                 lda STUK2
                 bne _QC65
 
-                lda STRIG1
+                ;--lda STRIG1
                 bne _QC6
 
 _QC65           rts
@@ -215,7 +216,7 @@ _OWNED          jsr PRESTO
                 sec
                 sbc #$04                ; CXMI
                 sta zpXP1
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda STUK0
                 beq _Q56
 
@@ -224,7 +225,7 @@ _OWNED          jsr PRESTO
 
                 jmp _DR
 
-_Q56            lda STRIG0
+_Q56            ;--lda STRIG0
                 bne _DR
 
                 ldx #$00
@@ -248,7 +249,7 @@ _P2OWN          jsr SETCAN
                 clc
                 adc #$06                ; CXPL
                 sta zpXP1
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda STUK2
                 beq _Q58
 
@@ -257,7 +258,7 @@ _P2OWN          jsr SETCAN
 
                 jmp _DR
 
-_Q58            lda STRIG1
+_Q58            ;--lda STRIG1
                 bne _DR
 
                 ldx #$01
@@ -309,7 +310,7 @@ _ENCAN          jsr SETCAN
 
                 lda #$00
                 sta STATCN
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda #$B5
                 sta NoteAttack
                 lda #$06
@@ -325,7 +326,7 @@ _ENCAN          jsr SETCAN
 FLY             .proc
                 lda #$01
                 sta STATCN
-                lda RANDOM
+                ;--lda RANDOM
                 bpl EDGFLY._ONEDIR
 
                 .endproc
@@ -341,12 +342,12 @@ EDGFLY          .proc
 
                 jmp _VERFLY
 
-_ONEDIR         lda RANDOM
+_ONEDIR         ;--lda RANDOM
                 bpl HORFLY
 
                 jmp _VERFLY
 
-_VERFLY         lda RANDOM
+_VERFLY         ;--lda RANDOM
                 bpl _SUBHOR
 
                 lda zpYP0,X
@@ -373,7 +374,7 @@ _YSTOR          sta zpYP1
 ;
 ;======================================
 HORFLY          .proc
-                lda RANDOM
+                ;--lda RANDOM
                 bpl _SUBVER
 
                 lda zpXP0,X
@@ -391,7 +392,7 @@ _SUBVER         lda zpXP0,X
 
                 adc #$15
 _XSTOR          sta zpXP1
-                sta HPOSP1
+                ;--sta HPOSP1
                 rts
                 .endproc
 
@@ -422,14 +423,14 @@ PRESTO          .proc
                 beq _BILL
 
 ;   NUGGET
-                lda M1PL
+                ;--lda M1PL
                 and #$02
                 beq _PRTS
 
                 lda #$FF                ; NUGGET
                 sta CNTYPE              ; TOWAIT
                 lda #$C8
-                sta PCOLR1              ; GREEN
+                ;--sta PCOLR1              ; GREEN
                 lda #$01
                 sta STATCN
                 jsr SETCAN
@@ -444,7 +445,7 @@ PRESTO          .proc
                 pla
 _PRTS           rts
 
-_BILL           lda M1PL
+_BILL           ;--lda M1PL
                 and #$02
                 beq _PRTS
 
@@ -534,11 +535,11 @@ DRSTOR          .proc
 ;
 ;======================================
 RANCAN          .proc
-                lda RANDOM
+                ;--lda RANDOM
                 and #$1F
                 ora #$1C
                 sta zpSCRH
-                lda RANDOM
+                ;--lda RANDOM
                 sta zpSCRL
                 cmp #$60
                 bcs _TESLW2
@@ -548,7 +549,7 @@ _TESLW2         lda zpSCRH
                 cmp #$1F
                 beq RANCAN
 
-_next1          lda RANDOM
+_next1          ;--lda RANDOM
                 cmp #$C0
                 bcs _next1
 
@@ -589,7 +590,7 @@ SETCAN          .proc
                 sta zpYBAS
                 lda zpXP1
                 sta zpXP
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda zpYP1
                 sta zpYP
                 rts
@@ -614,7 +615,7 @@ _QPL            rts
 ;======================================
 SNBPV1_2        .proc
                 lda #$A0
-                sta AUD1
+                ;--sta AUD1
                 lda #$80
                 sta DUR1
                 rts
@@ -626,7 +627,7 @@ SNBPV1_2        .proc
 ;======================================
 SNBPV3_2        .proc
                 lda #$A0
-                sta AUD3
+                ;--sta AUD3
                 lda #$80
                 sta DUR3
                 rts
@@ -671,7 +672,7 @@ FLASH           lda FRAME
                 and #$03
                 bne _COLOK
 
-                lda PCOLR1
+                ;--lda PCOLR1
                 ldx STATCN
                 bmi _OWNCOL
 
@@ -679,7 +680,7 @@ FLASH           lda FRAME
                 bne _STOCOL
 
 _OWNCOL         ora #$02
-_STOCOL         sta PCOLR1
+_STOCOL         ;--sta PCOLR1
 _COLOK          lda STATCN
                 bpl _TRIIN
 
@@ -694,7 +695,7 @@ _COLOK          lda STATCN
                 beq _M1OFF
 
                 lda #$89                ; SCALE
-                sta HPOSM1
+                ;--sta HPOSM1
                 lda #$1C
                 sta scrnL02C24
                 rts
@@ -723,14 +724,14 @@ _P2ON           ldx #$1E
                 beq _FRTS
 
 _STORE          lda #$7F
-                sta HPOSM1
+                ;--sta HPOSM1
 _FRTS           rts
 
 _TRIIN          lda #$07
                 sta L1F8C
                 sta L1FAB
 _M1OFF          lda #$00
-                sta HPOSM1
+                ;--sta HPOSM1
                 lda #$07
                 sta scrnL02C24
                 rts
@@ -742,7 +743,10 @@ _M1OFF          lda #$00
                 lda (zpSCRL,X)
                 and #$0F
                 cmp #$09
-                beq $A01B
+
+                ;;-- beq $A01B HACK:
+                ;;beq Q70._LA01A+1
+                .byte $F0,$3C   ; HACK:
 
                 lda (zpSCRL,X)
                 tay

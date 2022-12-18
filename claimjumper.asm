@@ -1,7 +1,14 @@
-                .include "equates_system_atari8.asm"
-                .include "equates_game.asm"
-                .include "equates_zeropage.asm"
 
+                .cpu "65816"
+
+                .include "equates_system_c256.asm"
+                .include "equates_zeropage.asm"
+                .include "equates_game.asm"
+
+                .include "macros_65816.asm"
+                .include "macros_frs_graphic.asm"
+                .include "macros_frs_mouse.asm"
+                .include "macros_frs_random.asm"
 
             .enc "atari-screen"
                 .cdef " Z",$00
@@ -10,6 +17,24 @@
                 .cdef " Z",$00
                 .cdef "az",$E1
             .enc "none"
+
+
+;--------------------------------------
+;--------------------------------------
+                * = L8000-40
+;--------------------------------------
+                .text "PGX"
+                .byte $01
+                .dword BOOT
+
+BOOT            clc
+                xce
+                .m8i8
+                .setdp $0000
+                .setbank $00
+                cld
+
+                jmp CART_START
 
 
 ;--------------------------------------
@@ -314,7 +339,9 @@ L8000           .byte $80,$80,$80,$80,$6C,$80,$80,$80,$80,$80,$80,$80,$80,$80,$9
 
 ;--------------------------------------
 
+;--------------------------------------
                 .fill 56,$00
+;--------------------------------------
 
 
 ;======================================
@@ -334,7 +361,7 @@ L940B           jmp L946A
 ;--------------------------------------
 L940E           lda #$00
                 ldy #$07
-_next1          sta HPOSP0,Y
+_next1          ;--sta HPOSP0,Y
                 dey
                 bpl _next1
 
@@ -355,7 +382,7 @@ _next2          lda STAMPS_A,Y
                 bne _next2
 
                 lda #$0C                ; standard character set
-                sta CHBAS
+                ;--sta CHBAS
 
                 lda #$07
                 sta zpSCDATA
@@ -432,7 +459,9 @@ _next2          sta L1FE0,X
 ;--------------------------------------
 ;--------------------------------------
 
+;--------------------------------------
                 .fill 9,$00
+;--------------------------------------
 
 L94B0           .byte $07,$00,$00,$00,$60,$61,$00,$64   ; two lines of text??
                 .byte $00,$00,$67,$68,$00,$64,$00,$6B
@@ -476,19 +505,21 @@ MsgShootem2     .text 'shootvem two'
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 L95E0_DLI       pha
                 lda #$A0
-                eor COLRSH
-                and DRKMSK
-                sta WSYNC
-                sta COLPF2
+                ;--eor COLRSH
+                ;--and DRKMSK
+                ;--sta WSYNC
+                ;--sta COLPF2
                 lda #$94
-                sta CHBASE
+                ;--sta CHBASE
                 pla
                 rti
 
 ;--------------------------------------
 ;--------------------------------------
 
+;--------------------------------------
                 .fill 12,$00
+;--------------------------------------
 
 L9600           .byte $70,$70,$70,$70,$00,$00,$00,$00
                 .byte $00,$00,$00,$00,$00,$00,$00,$00
@@ -625,18 +656,18 @@ FREQ            .byte $00,$00,$00,$00,$00,$00,$00,$00
 ;======================================
 ENDFR           inc FRAME
 
-                lda PORTA
+                ;--lda PORTA
                 eor #$FF
                 beq _next1
 
                 lda #$00
-                sta ATRACT
+                ;--sta ATRACT
 
-_next1          lda VCOUNT
+_next1          ;--lda VCOUNT
                 cmp #$70
                 bcs _next1
 
-_next2          lda VCOUNT
+_next2          ;--lda VCOUNT
                 cmp #$70
                 bcc _next2
 
@@ -645,7 +676,9 @@ _next2          lda VCOUNT
 ;--------------------------------------
 ;--------------------------------------
 
+;--------------------------------------
                 .fill 3,$00
+;--------------------------------------
 
 ;--------------------------------------
 
@@ -658,8 +691,8 @@ FTABLE_ROM      .byte $00,$F3,$E6,$D9,$CC,$C1,$B6,$AD
                 .byte $00
 
 ;--------------------------------------
-
                 .fill 7,$00
+;--------------------------------------
 
 ;--------------------------------------
 ;--------------------------------------
@@ -688,9 +721,9 @@ LAF73           cmp #$10
                 lda #$07
                 sta L1FB4,Y
 _next1          lda #$88
-                sta AUDC4
+                ;--sta AUDC4
                 lda #$20
-                sta AUDF4
+                ;--sta AUDF4
                 bne LAF55+1
 
 _1              eor #$0F
@@ -749,11 +782,9 @@ _next3          lda L39F2,X
 
                 rts
 
-;--------------------------------------
-;--------------------------------------
 
+;--------------------------------------
                 .fill 7,$00
-
 ;--------------------------------------
 
                 .include "STAMPS.asm"
@@ -801,25 +832,25 @@ FLESH           .byte $00,$00,$00,$C0,$C0,$00,$00,$00
 
                 .include "main.asm"
 
-LBB80_DLIST     .byte AEMPTY8           ; 8 scanlines
+LBB80_DLIST     ; .byte AEMPTY8           ; 8 scanlines
 
-                .byte $04+ALMS          ; 200 scanlines - 25 lines of 4-color text
-                    .addr ScreenBuffer
-                .byte $04,$04,$04,$04
-                .byte $04,$04,$04,$04
-                .byte $04,$04,$04,$04
-                .byte $04,$04,$04,$04
-                .byte $04,$04,$04,$04
-                .byte $04,$04,$04
-                .byte $04+ADLI
+                ; .byte $04+ALMS          ; 200 scanlines - 25 lines of 4-color text
+                ;     .addr ScreenBuffer
+                ; .byte $04,$04,$04,$04
+                ; .byte $04,$04,$04,$04
+                ; .byte $04,$04,$04,$04
+                ; .byte $04,$04,$04,$04
+                ; .byte $04,$04,$04,$04
+                ; .byte $04,$04,$04
+                ; .byte $04+ADLI
 
-                .byte AEMPTY1           ; 1 scanline
+                ; .byte AEMPTY1           ; 1 scanline
 
-                .byte $02               ; 8 scanlines - 1 line of 2-color text
-                .byte $04+ALMS          ; 8 scanlines - 1 line of 4-color text
-                    .addr ScreenFooter
-                .byte AVB+AJMP
-                    .word $1B80         ; LBB80_DLIST
+                ; .byte $02               ; 8 scanlines - 1 line of 2-color text
+                ; .byte $04+ALMS          ; 8 scanlines - 1 line of 4-color text
+                ;     .addr ScreenFooter
+                ; .byte AVB+AJMP
+                ;     .word $1B80         ; LBB80_DLIST
 
                 .fill 28,$00            ; overrun protection for copy to RAM
 
@@ -833,14 +864,14 @@ LBBC0           jsr LBF5B
 
                 jmp LBC5F
 
-_1              lda RANDOM
+_1              ;--lda RANDOM
                 and #$0F
                 bne _XIT
 
                 lda MCNT4
                 bne _XIT
 
-                lda RANDOM
+                ;--lda RANDOM
                 cmp CANCRI
                 bcs _XIT
 
@@ -918,7 +949,7 @@ _5              ldx #$FF
                 lda #$08
                 sta CNTYPE
                 lda #$2C
-                sta PCOLR1
+                ;--sta PCOLR1
 
                 jsr LBF0D
                 jsr LBEFB
@@ -926,7 +957,7 @@ _5              ldx #$FF
                 lda #$BC
                 sta DUR4
                 lda #$A0
-                sta AUD4
+                ;--sta AUD4
 _XIT2           rts
 
 
@@ -957,7 +988,7 @@ _1              lda CNTYPE
 
                 rts
 
-_2              lda P1PL
+_2              ;--lda P1PL
                 and #$05
                 bne LBCA5
 
@@ -999,7 +1030,7 @@ _1              and #$01
                 ldy STUK0
                 bne LBCD0
 
-                ldy STRIG0
+                ;--ldy STRIG0
                 beq LBCD0
 
                 lda #$80
@@ -1015,14 +1046,14 @@ _XIT            rts
 ;--------------------------------------
 ;
 ;--------------------------------------
-LBCD0           lda P1PL
+LBCD0           ;--lda P1PL
                 and #$04
                 beq _XIT
 
                 lda STUK2
                 bne _XIT
 
-                lda STRIG1
+                ;--lda STRIG1
                 bne LBCE2
 
 _XIT            rts
@@ -1062,7 +1093,7 @@ LBCF0           jsr LBE30
                 sec
                 sbc #$04
                 sta zpXP1
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda STUK0
                 beq _1
 
@@ -1071,7 +1102,7 @@ LBCF0           jsr LBE30
 
                 jmp LBD99
 
-_1              lda STRIG0
+_1              ;--lda STRIG0
                 bne LBD99
 
                 ldx #$00
@@ -1095,7 +1126,7 @@ _2              jsr LBF0D
                 clc
                 adc #$06
                 sta zpXP1
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda STUK2
                 beq _3
 
@@ -1104,7 +1135,7 @@ _2              jsr LBF0D
 
                 jmp LBD99
 
-_3              lda STRIG1
+_3              ;--lda STRIG1
                 bne LBD99
 
                 ldx #$01
@@ -1113,7 +1144,7 @@ _4              lda #$01
                 lda GAMENO
                 bne _6
 
-                lda CNTYPE
+_LBB59          lda CNTYPE
                 bne _6
 
                 lda zpYP1
@@ -1171,7 +1202,7 @@ LBDAD           jsr LBF0D
 
                 lda #$00
                 sta STATCN
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda #$B5
                 sta NoteAttack
                 lda #$06
@@ -1186,7 +1217,7 @@ LBDAD           jsr LBF0D
 ;======================================
 LBDCB           lda #$01
                 sta STATCN
-                lda RANDOM
+                ;--lda RANDOM
                 bpl LBDDB
 
 
@@ -1201,7 +1232,7 @@ LBDD5           jsr LBE04
 ;--------------------------------------
 ;
 ;--------------------------------------
-LBDDB           lda RANDOM
+LBDDB           ;--lda RANDOM
                 bpl LBE04
 
                 jmp LBDE3
@@ -1210,7 +1241,7 @@ LBDDB           lda RANDOM
 ;--------------------------------------
 ;
 ;--------------------------------------
-LBDE3           lda RANDOM
+LBDE3           ;--lda RANDOM
                 bpl _1
 
                 lda zpYP0,X
@@ -1235,7 +1266,7 @@ _2              sta zpYP1
 ;======================================
 ;
 ;======================================
-LBE04           lda RANDOM
+LBE04           ;--lda RANDOM
                 bpl _1
 
                 lda zpXP0,X
@@ -1253,7 +1284,7 @@ _1              lda zpXP0,X
 
                 adc #$15
 _2              sta zpXP1
-                sta HPOSP1
+                ;--sta HPOSP1
                 rts
 
 
@@ -1279,14 +1310,14 @@ LBE30           lda STATCN
                 lda CNTYPE
                 beq _1
 
-                lda M1PL
+                ;--lda M1PL
                 and #$02
                 beq _XIT
 
                 lda #$FF
                 sta CNTYPE
                 lda #$C8
-                sta PCOLR1
+                ;--sta PCOLR1
                 lda #$01
                 sta STATCN
 
@@ -1302,7 +1333,7 @@ LBE30           lda STATCN
                 pla
 _XIT            rts
 
-_1              lda M1PL
+_1              ;--lda M1PL
                 and #$02
                 beq _XIT
 
@@ -1371,11 +1402,11 @@ LBEBD           lda #$08
 ;======================================
 ;
 ;======================================
-LBED0           lda RANDOM
+LBED0           ;--lda RANDOM
                 and #$1F
                 ora #$1C
                 sta zpSCRH
-                lda RANDOM
+                ;--lda RANDOM
                 sta zpSCRL
                 cmp #$60
                 bcs _1
@@ -1386,7 +1417,7 @@ _1              lda zpSCRH
                 cmp #$1F
                 beq LBED0
 
-_next1          lda RANDOM
+_next1          ;--lda RANDOM
                 cmp #$C0
                 bcs _next1
 
@@ -1423,7 +1454,7 @@ LBF0D           lda #$0D
                 sta zpYBAS
                 lda zpXP1
                 sta zpXP
-                sta HPOSP1
+                ;--sta HPOSP1
                 lda zpYP1
                 sta zpYP
                 rts
@@ -1444,7 +1475,7 @@ _XIT            rts
 ;
 ;======================================
 LBF25           lda #$A0
-                sta AUD1
+                ;--sta AUD1
                 lda #$80
                 sta DUR1
                 rts
@@ -1454,7 +1485,7 @@ LBF25           lda #$A0
 ;
 ;======================================
 LBF30           lda #$A0
-                sta AUD3
+                ;--sta AUD3
                 lda #$80
                 sta DUR3
                 rts
@@ -1496,7 +1527,7 @@ LBF5B           lda FRAME
                 and #$03
                 bne _3
 
-                lda PCOLR1
+                ;--lda PCOLR1
                 ldx STATCN
                 bmi _1
 
@@ -1504,7 +1535,7 @@ LBF5B           lda FRAME
                 bne _2
 
 _1              ora #$02
-_2              sta PCOLR1
+_2              ;--sta PCOLR1
 _3              lda STATCN
                 bpl _7
 
@@ -1519,7 +1550,7 @@ _3              lda STATCN
                 beq _8
 
                 lda #$89
-                sta HPOSM1
+                ;--sta HPOSM1
                 lda #$1C
                 sta scrnL02C24
                 rts
@@ -1548,7 +1579,7 @@ _5              ldx #$1E
                 beq _XIT
 
 _6              lda #$7F
-                sta HPOSM1
+                ;--sta HPOSM1
 _XIT            rts
 
 _7              lda #$07
@@ -1565,8 +1596,8 @@ LBFD0           .byte $07,$66,$67,$68,$07,$66,$67,$67
                 .byte $07,$65,$65,$65,$07,$66,$68,$07
 
 ;--------------------------------------
-
                 .fill 24,$00
+;--------------------------------------
 
 
 ;--------------------------------------

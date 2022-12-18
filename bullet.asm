@@ -19,7 +19,7 @@ BUL0            .proc
 
                 rts
 
-_1              lda M0PL
+_1              ;--lda M0PL
                 and #$04
                 bne _2
 
@@ -53,10 +53,10 @@ _2              lda #$00
                 lda #$90
                 sta DUR3
                 lda #$A0
-                sta AUD3
+                ;--sta AUD3
 _3              rts
 
-_4              lda M0PF
+_4              ;--lda M0PF
                 bne _5
 
                 jmp Q70
@@ -138,7 +138,7 @@ Q70             .proc
 
                 jsr ERSM0
 
-                lda YM0
+_LA01A          lda YM0
                 clc
                 adc #$05
                 cmp #$DF
@@ -184,7 +184,7 @@ SIDEW0          .proc
                 bcs Q70._OFFSC1
 
                 sta XM0
-                sta HPOSM0
+                ;--sta HPOSM0
                 rts
 
 _1              lda XM0
@@ -194,7 +194,7 @@ _1              lda XM0
                 bcc Q70._OFFSC1
 
                 sta XM0
-                sta HPOSM0
+                ;--sta HPOSM0
                 rts
                 .endproc
 
@@ -244,7 +244,7 @@ BUL2            .proc
 
                 rts
 
-_1              lda M2PL
+_1              ;--lda M2PL
                 and #$01
                 bne _2
 
@@ -278,11 +278,11 @@ _2              lda #$00
                 lda #$90
                 sta DUR1
                 lda #$A0
-                sta AUD1
+                ;--sta AUD1
 
 _XIT1           rts
 
-_3              lda M2PF
+_3              ;--lda M2PF
                 bne _4
 
                 jmp W70
@@ -417,7 +417,7 @@ SIDEW2          .proc
                 bcs W70._OFFSC3
 
                 sta XM2
-                sta HPOSM2
+                ;--sta HPOSM2
                 rts
 
 _1              lda XM2
@@ -427,7 +427,7 @@ _1              lda XM2
                 bcc W70._OFFSC3
 
                 sta XM2
-                sta HPOSM2
+                ;--sta HPOSM2
                 rts
                 .endproc
 
@@ -718,7 +718,7 @@ WIDEN2          .proc
 ;======================================
 QSN1            .proc
                 lda #$A0
-                sta AUD2
+                ;--sta AUD2
                 lda #$50
                 sta DUR2
                 rts
@@ -730,7 +730,7 @@ QSN1            .proc
 ;======================================
 QSN2            .proc
                 lda #$A0
-                sta AUD4
+                ;--sta AUD4
                 lda #$60
                 sta DUR4
                 rts
@@ -757,7 +757,10 @@ PLUS            .proc
 ;---
 
                 dex
-                bpl $A3F0
+
+                ;;-- bpl $A3F0 HACK:
+                ;;bpl SMOOTH._LA3EE+2
+                .byte $10,$F4   ; HACK:
 
                 rts
 

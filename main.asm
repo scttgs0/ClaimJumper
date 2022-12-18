@@ -1,3 +1,4 @@
+
 ;======================================
 ;
 ;======================================
@@ -12,7 +13,7 @@ MOV0            lda #$0C                ; P0BAS
                 lda STUK0
                 bne _JJST0
 
-                lda STRIG0
+                ;--lda STRIG0
                 beq _PUSHT0
 
                 lda #$00
@@ -61,7 +62,7 @@ _Q04            ldx #$81                ; RIGHT
 _CORDM0         lda STUK0
                 bne _NODRP0             ; STUK
 
-                lda P0PF
+                ;--lda P0PF
                 and #$04                ; P0PF2
                 beq _SHOOT0
 
@@ -91,7 +92,7 @@ _BOK0           lda zpYP0
 _NPH0           lda zpXP0
                 adc #$07
                 sta XM0
-                sta HPOSM0
+                ;--sta HPOSM0
                 jsr WIDEN0
                 jsr SN2V1
 
@@ -165,7 +166,7 @@ _QX20           jsr DRSTUK
 
                 jmp _BACK2
 
-_COLL0          lda P0PF
+_COLL0          ;--lda P0PF
                 and #$01
                 beq _Q28
 
@@ -195,7 +196,7 @@ _Q28            lda IMMUN0
                 beq _STMOV0
 
                 dec IMMUN0
-_STMOV0         lda STICK0
+_STMOV0         ;--lda STICK0
                 sta STSHFT
                 jsr UPDTXY
 
@@ -203,10 +204,10 @@ _Q25            lda zpYP
                 sta zpYP0
                 lda zpXP
                 sta zpXP0
-                sta HPOSP0
+                ;--sta HPOSP0
                 clc
                 adc #$04
-                sta HPOSM3
+                ;--sta HPOSM3
                 jsr DRMVNG
 
 _BACK2          rts
@@ -254,7 +255,7 @@ EDGE            .proc
                 beq _Q55
 
                 iny
-_Q55            lda STICK0,Y            ; STIK0 OR 1
+_Q55            ;--lda STICK0,Y            ; STIK0 OR 1
                 sta STSHFT
                 lda zpXP
                 cmp #$C6
@@ -372,7 +373,7 @@ MOV2            lda #$0E
                 lda STUK2
                 bne _JJST2
 
-                lda STRIG1
+                ;--lda STRIG1
                 beq _PUSHT2
 
                 lda #$00
@@ -421,7 +422,7 @@ _W04            ldx #$81                ; RIGHT
 _CORDM2         lda STUK2
                 bne _NODRP2             ; STUK
 
-                lda P2PF
+                ;--lda P2PF
                 and #$04
                 beq _SHOOT2
 
@@ -451,7 +452,7 @@ _BOK2           lda zpYP2
 _NPH2           lda zpXP2
                 adc #$02
                 sta XM2
-                sta HPOSM2
+                ;--sta HPOSM2
                 jsr WIDEN2
                 jsr SN2V3
 
@@ -525,7 +526,7 @@ _WX20           jsr DRSTUK
 
                 jmp _SQRDUN
 
-_COLL2          lda P2PF
+_COLL2          ;--lda P2PF
                 and #$02
                 beq _W28
 
@@ -555,7 +556,7 @@ _W28            lda IMMUN2
                 beq _STMOV2
 
                 dec IMMUN2
-_STMOV2         lda STICK1
+_STMOV2         ;--lda STICK1
                 sta STSHFT
                 jsr UPDTXY
 
@@ -563,10 +564,10 @@ _W25            lda zpYP
                 sta zpYP2
                 lda zpXP
                 sta zpXP2
-                sta HPOSP2
+                ;--sta HPOSP2
                 clc
                 adc #$04
-                sta HPOSP3
+                ;--sta HPOSP3
                 jsr DRMVNG
 
 _SQRDUN         rts
@@ -576,7 +577,7 @@ _SQRDUN         rts
 ;
 ;======================================
 DOCT0           .proc
-                lda STICK0
+                ;--lda STICK0
                 bne DOCT2._DOCTX
 
                 .endproc
@@ -588,7 +589,7 @@ DOCT0           .proc
 ;
 ;======================================
 DOCT2           .proc
-                lda STICK1
+                ;--lda STICK1
 _DOCTX          and #$0C
                 cmp #$0C
                 beq _RANDOC
@@ -606,7 +607,7 @@ _DOCDUN         lda #$29
                 sta zpYP
                 rts
 
-_RANDOC         lda RANDOM
+_RANDOC         ;--lda RANDOM
                 bmi _RTDOC
                 bpl _LFDOC              ; UNC
 
@@ -817,7 +818,7 @@ PITPAT          .proc
                 rts
 
 _PIT0           lda #$00
-                sta AUD1
+                ;--sta AUD1
                 lda #$0E
                 sta DUR1
                 lda #$32
@@ -830,7 +831,7 @@ _PL2PIT         lda DUR3
                 rts
 
 _PIT2           lda #$20
-                sta AUD3
+                ;--sta AUD3
                 lda #$0E
                 sta DUR3
                 lda #$42
@@ -844,7 +845,7 @@ _PIT2           lda #$20
 ;======================================
 SN1V1           .proc
                 lda #$A0                ; PL0 FART
-                sta AUD1
+                ;--sta AUD1
                 lda #$40
                 sta DUR1
                 rts
@@ -856,7 +857,7 @@ SN1V1           .proc
 ;======================================
 SN1V3           .proc
                 lda #$C0                ; PL2 FART
-                sta AUD3
+                ;--sta AUD3
                 lda #$10
                 sta DUR3
                 rts
@@ -868,7 +869,7 @@ SN1V3           .proc
 ;======================================
 SN2V1           .proc
                 lda #$80
-                sta AUD1
+                ;--sta AUD1
                 lda #$20
                 sta DUR1
                 rts
@@ -880,7 +881,7 @@ SN2V1           .proc
 ;======================================
 SN2V3           .proc
                 lda #$80
-                sta AUD3
+                ;--sta AUD3
                 lda #$20
                 sta DUR3
                 rts
@@ -892,7 +893,7 @@ SN2V3           .proc
 ;======================================
 SN3V1           .proc
                 lda #$20                ; PL0 FROZ
-                sta AUD1
+                ;--sta AUD1
                 lda #$30
                 sta DUR1
                 rts
@@ -903,7 +904,7 @@ SN3V1           .proc
 ; Sound-4, Voice-3
 ;======================================
 SN4V3           lda #$C0                ; PL2 BZ
-                sta AUD3
+                ;--sta AUD3
                 lda #$30
                 sta DUR3
                 rts
@@ -914,7 +915,7 @@ SN4V3           lda #$C0                ; PL2 BZ
 ;======================================
 SNBPV1          .proc
                 lda #$A0                ; BUTBEEP
-                sta AUD1
+                ;--sta AUD1
                 lda #$80
                 sta DUR1
                 rts
@@ -926,7 +927,7 @@ SNBPV1          .proc
 ;======================================
 SNBPV3          .proc
                 lda #$A0
-                sta AUD3
+                ;--sta AUD3
                 lda #$80
                 sta DUR3
                 rts
@@ -959,7 +960,10 @@ _XIT            rts
                 sta L06C9,X
                 inx
                 dey
-                bne $BB5B
+
+                ;;-- bne $BB5B HACK:
+                ;;bne LBCF0._LBB59+2
+                .byte $D0,$F0   ; HACK:
 
                 rts
 
@@ -971,7 +975,7 @@ _XIT            rts
                 rts
                 .endproc
 
-;--------------------------------------
-;--------------------------------------
 
+;--------------------------------------
                 .fill 12,$00
+;--------------------------------------

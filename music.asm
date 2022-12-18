@@ -1,3 +1,4 @@
+
 ;======================================
 ; Music Routine
 ;======================================
@@ -9,7 +10,8 @@ vDATAL3 = $90
 ;---
 
                 ldx #$00
-                stx AUDC4
+                ;--stx AUDC4
+
                 lda #vDATAL1
                 sta zpSCRL+4
                 lda #vDATAH1
@@ -83,7 +85,7 @@ _DOTOK          lsr A
                 and #$3F
                 tay
                 lda FTABLE,Y
-                sta AUDF1,X
+                ;--sta AUDF1,X
                 ldy NoteDURCOD
                 lda _DURTAB,Y
                 sta NoteDuration,X
@@ -117,7 +119,7 @@ _SAMNOT         dec NoteDuration,X
                 beq _DUN
 
                 lda #$A7
-_DUN            sta AUDC1,X
+_DUN            ;--sta AUDC1,X
                 rts
 
 _REST           lda #$A0

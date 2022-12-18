@@ -1,3 +1,4 @@
+
 ;======================================
 ;
 ;======================================
@@ -41,7 +42,7 @@ _Q31            sec
                 jmp _Q32
 
 _PLSNK          ldx #$00
-                lda RANDOM              ; CHANCE OF NEW COLR
+                ;--lda RANDOM              ; CHANCE OF NEW COLR
                 bmi _PP0
                 bpl _PP2                ; UNC
 
@@ -84,7 +85,7 @@ _CRTEST         lda NUMSNK
                 cmp #$0A
                 bcs _Q32                ; ALREADY 10
 
-                lda RANDOM
+                ;--lda RANDOM
                 cmp CRECRI
                 bcc _GOCREA
 
@@ -125,11 +126,11 @@ _Q1RTS          rts
 ;
 ;======================================
 RANDSC          .proc
-                lda RANDOM
+                ;--lda RANDOM
                 and #$1F
                 ora #$1C
                 sta zpSCRH
-                lda RANDOM
+                ;--lda RANDOM
                 sta zpSCRL
                 cmp #$C8
                 bcs _TESLOW
@@ -180,7 +181,7 @@ _SUB40B         iny
                 sbc #$0D
 L9BB4           rts
 
-;--------------------------------------
-;--------------------------------------
 
+;--------------------------------------
                 .fill 11,$00
+;--------------------------------------

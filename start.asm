@@ -1,3 +1,4 @@
+
 ;--------------------------------------
 ;
 ;--------------------------------------
@@ -33,8 +34,8 @@ _ATRLP          jsr ENDFR
 ;
 ;======================================
 STRTES          lda #$08
-                sta CONSOL
-                lda CONSOL
+                ;--sta CONSOL
+                ;--lda CONSOL
                 lsr A
                 bcc _STRDB
 
@@ -51,7 +52,7 @@ _PLSTAT         pla
                 pla
                 lda #$01
                 sta STRTFL
-                sta HPOSM1
+                ;--sta HPOSM1
                 lda #$3E
                 sta zpXP0
                 lda #$B8
@@ -72,7 +73,7 @@ LA899           jsr CLRSCR
                 jsr HOSPIT
                 jsr ENDFR
 
-                sta HITCLR
+                ;--sta HITCLR
                 lda GAMENO
                 beq _SS0
 
@@ -96,8 +97,8 @@ OP0TES          .proc
 OP1TES          ldx #$01
 
 OPTES           lda #$08
-                sta CONSOL
-                lda CONSOL
+                ;--sta CONSOL
+                ;--lda CONSOL
                 lsr A
                 lsr A
                 lsr A
@@ -128,7 +129,7 @@ _PLOP           pla
                 pla
                 lda #$01
                 sta OPTFL
-                sta HPOSM1
+                ;--sta HPOSM1
                 txa
                 bne _OPT1
 
@@ -227,7 +228,7 @@ _G1LOOP         lda FRAME
                 and #$01
                 bne _GQ1
 
-                lda RANDOM
+                ;--lda RANDOM
                 and XFREQ
                 bne _ALTF
 
@@ -240,7 +241,7 @@ _G1LOOP         lda FRAME
                 lda #$04
                 sta (zpSCRL,X)
                 lda #$C0
-                sta AUD3
+                ;--sta AUD3
                 lda #$10
                 sta DUR3
                 inc XCOUNT
@@ -273,37 +274,37 @@ INIT            .proc
                 jsr MODE4
 
                 lda #$00
-                sta AUDCTL
+                ;--sta AUDCTL
                 lda #$03
-                sta SKCTL
+                ;--sta SKCTL
 
                 cld
                 lda #$3E            ; 1-LINE
-                sta SDMCTL
+                ;--sta SDMCTL
 
                 lda #$08
-                sta PMBASE
+                ;--sta PMBASE
 
                 lda #$03
-                sta GRACTL
+                ;--sta GRACTL
                 lda #$21
-                sta GPRIOR
+                ;--sta GPRIOR
 
                 lda #$0C
-                sta CHBAS
+                ;--sta CHBAS
 
                 lda #<L95E0_DLI
-                sta VDSLST
+                ;--sta VDSLST
                 lda #>L95E0_DLI
-                sta VDSLST+1
+                ;--sta VDSLST+1
 
                 lda #$C0
-                sta NMIEN
+                ;--sta NMIEN
 
                 lda #$00
-                sta SDLSTL
+                ;--sta SDLSTL
                 lda #$08
-                sta SDLSTH
+                ;--sta SDLSTH
 
                 ldx #$07
 _BOB            lda _DBYTE,X
@@ -325,15 +326,15 @@ _DBYTE          .byte $00,$00,$00,$10,$03,$3F,$00,$00
 ;======================================
 COLPF           .proc
                 lda #$4A
-                sta COLOR0              ; SNAKE
+                ;--sta COLOR0              ; SNAKE
                 lda #$26
-                sta COLOR1              ; TUMB
+                ;--sta COLOR1              ; TUMB
                 lda #$AA
-                sta COLOR2              ; HOSPIT
+                ;--sta COLOR2              ; HOSPIT
                 lda #$C8
-                sta COLOR3              ; BILLS
+                ;--sta COLOR3              ; BILLS
                 lda #$00
-                sta COLOR4
+                ;--sta COLOR4
                 rts
                 .endproc
 
@@ -343,13 +344,13 @@ COLPF           .proc
 ;======================================
 COLPM           .proc
                 lda #$E6
-                sta PCOLR0              ; COWB0
+                ;--sta PCOLR0              ; COWB0
                 lda #$3A
-                sta PCOLR2              ; COWB2
+                ;--sta PCOLR2              ; COWB2
                 lda #$2C
-                sta PCOLR1              ; NUGGET
+                ;--sta PCOLR1              ; NUGGET
                 lda #$28
-                sta PCOLR3              ; FACES
+                ;--sta PCOLR3              ; FACES
                 rts
                 .endproc
 
@@ -639,8 +640,8 @@ DROPT2          .proc
 ;======================================
 POLL0           .proc
                 lda #$08
-                sta CONSOL
-                lda CONSOL
+                ;--sta CONSOL
+                ;--lda CONSOL
                 lsr A
                 lsr A
                 bcc _PUSHTC
@@ -791,7 +792,7 @@ POLL1           .proc
 
                 rts
 
-_POL1OK         lda STRIG0
+_POL1OK         ;--lda STRIG0
                 bne _UNLOK0
 
                 lda TRG0FL
@@ -801,7 +802,7 @@ _POL1OK         lda STRIG0
                 sta TRG0FL
                 jsr CHOPT0
 
-_POLTG1         lda STRIG1
+_POLTG1         ;--lda STRIG1
                 bne _UNLOK1
 
                 lda TRG1FL
@@ -1008,7 +1009,7 @@ _HDLP2          sta L1FCE,X
 ;======================================
 MODE2           .proc
                 lda #$94
-                sta CHBAS
+                ;--sta CHBAS
                 ldx #$0A
                 ldy #$50
                 lda #$02
@@ -1022,13 +1023,13 @@ MODE2           .proc
 ;======================================
 MODE4           .proc
                 lda #$B0
-                sta CHBAS
+                ;--sta CHBAS
                 ldx #$26                ; BROWN
                 ldy #$AA                ; BLUE
 
                 lda #$04
-_CHDL           stx COLOR1
-                sty COLOR2
+_CHDL           ;--stx COLOR1
+                ;--sty COLOR2
 
                 ldx #$16
 _CHDLP          sta DLIST_RAM+4,X
@@ -1097,7 +1098,7 @@ PLHAUS          .proc
 _FNLP           inc TEST
                 beq BUG
 
-                lda RANDOM
+                ;--lda RANDOM
                 and #$07
                 tay
                 lda CACPOS,Y
@@ -1242,7 +1243,7 @@ _GRTS           rts
 ;--------------------------------------
 WIN             ldx #$06
                 lda #$00
-_QULOP          sta AUDC1,X
+_QULOP          ;--sta AUDC1,X
                 dex
                 bpl _QULOP
 
@@ -1256,7 +1257,7 @@ _WINLOP         jsr ENDFR
                 bne _WINLOP
 
                 lda #$00
-                sta AUDC4
+                ;--sta AUDC4
                 beq _WINLOP
 
 _REMOVE         dec WINCNT
@@ -1277,9 +1278,9 @@ _REMOVE         dec WINCNT
                 lda #$07
                 sta L1FB4,Y
 _SNBANG         lda #$88
-                sta AUDC4
+                ;--sta AUDC4
                 lda #$20
-                sta AUDF4
+                ;--sta AUDF4
                 bne _WINLOP
 
 _P2BIL          eor #$0F
