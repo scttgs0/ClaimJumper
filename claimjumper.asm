@@ -1,6 +1,7 @@
-                .include "equates_system_atari8.asm"
-                .include "equates_game.asm"
-                .include "equates_zeropage.asm"
+
+                .include "equates/system_atari8.equ"
+                .include "equates/zeropage.equ"
+                .include "equates/game.equ"
 
 
             .enc "atari-screen"
@@ -310,7 +311,7 @@ L8000           .byte $80,$80,$80,$80,$6C,$80,$80,$80,$80,$80,$80,$80,$80,$80,$9
 ;--------------------------------------
 
                 .include "music.asm"
-                .include "TITLE.asm"
+                .include "data/TITLE.inc"
 
 ;--------------------------------------
 
@@ -511,7 +512,7 @@ L9600           .byte $70,$70,$70,$70,$00,$00,$00,$00
                 .byte $68,$60,$60,$60,$60,$60,$60,$60
                 .byte $60,$60,$60,$60,$62,$61,$6E,$6B
 
-                .include "CHARSET.asm"
+                .include "data/CHARSET.inc"
 
 L9800           .byte $07,$07,$07,$07,$07,$07,$07,$07
                 .byte $07,$E7,$07,$66,$67,$68,$07,$E5
@@ -756,7 +757,7 @@ _next3          lda L39F2,X
 
 ;--------------------------------------
 
-                .include "STAMPS.asm"
+                .include "data/STAMPS.inc"
                 .include "points.asm"
 
 ;--------------------------------------
