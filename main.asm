@@ -957,6 +957,9 @@ _COMLP          lda L06C2,X
 
 _XIT            rts
 
+
+;---
+;--- junk
                 sta L06C9,X
                 inx
                 dey

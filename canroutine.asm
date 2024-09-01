@@ -737,7 +737,7 @@ _M1OFF          lda #$00
                 rts
 
 ;---
-;---
+;--- junk
 
                 ldx #$00
                 lda (zpSCRL,X)

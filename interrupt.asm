@@ -1,43 +1,60 @@
 
-HandleIrq       .proc
-                .m16i16
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+; Main IRQ Handler
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+irqMain         .proc
                 pha
                 phx
                 phy
-                .m8i8
 
-                lda @l INT_PENDING_REG1
-                bit #FNX1_INT00_KBD
-                beq _1
+                cld
 
-                jsl KeyboardHandler
+;   switch to system map
+                lda IOPAGE_CTRL
+                pha                     ; preserve
+                stz IOPAGE_CTRL
 
-                lda @l INT_PENDING_REG1
-                sta @l INT_PENDING_REG1
+                lda INT_PENDING_REG0
+                sta irq_pending
+                sta INT_PENDING_REG0
 
-_1              lda @l INT_PENDING_REG0
-                bit #FNX0_INT00_SOF
-                beq _XIT
+                ; lda INT_PENDING_REG1
+                ; bit #INT01_VIA1
+                ; beq _chkSOF
 
-                jsl VBIHandler
+                ; lda INT_PENDING_REG1
+                ; sta INT_PENDING_REG1
 
-                lda @l INT_PENDING_REG0
-                sta @l INT_PENDING_REG0
+                ; jsr KeyboardHandler
 
-_XIT            .m16i16
+_chkSOF         lda irq_pending
+                bit #INT00_SOF
+                beq _chkSOL
+
+                jsr irqVBIHandler
+
+_chkSOL         ;!!lda irq_pending
+                ;!!bit #INT00_SOL
+                ;!!beq _XIT
+
+                ;!!jsr irqDLIHandler
+
+_XIT            pla                     ; restore
+                sta IOPAGE_CTRL
+
                 ply
                 plx
                 pla
-                .m8i8
 
-HandleIrq_END   rti
-                ;jmp IRQ_PRIOR
-
+irqMain_END     ;jmp IRQ_PRIOR
+                rti
                 .endproc
 
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; Handle Key notifications
+; Key Notifications
 ;--------------------------------------
 ;   ESC         $01/$81  press/release
 ;   R-Ctrl      $1D/$9D
@@ -61,15 +78,11 @@ KEY_DOWN        = $50
 KEY_CTRL        = $1D                   ; fire button
 ;---
 
-                .m16i16
                 pha
                 phx
                 phy
 
-                .m8i8
-                .setbank $00
-
-                lda KBD_INPT_BUF
+                lda PS2_KEYBD_IN
                 pha
                 sta KEYCHAR
 
@@ -81,9 +94,9 @@ _1              pla                     ;   no
                 cmp #KEY_F2
                 bne _2
 
-                ;--lda CONSOL
+                lda CONSOL
                 eor #$04
-                ;--sta CONSOL
+                sta CONSOL
 
                 jmp _CleanUpXIT
 
@@ -92,9 +105,9 @@ _1r             pla
                 cmp #KEY_F2|$80
                 bne _2r
 
-                ;--lda CONSOL
+                lda CONSOL
                 ora #$04
-                ;--sta CONSOL
+                sta CONSOL
 
                 jmp _CleanUpXIT
 
@@ -103,9 +116,9 @@ _2              pla
                 cmp #KEY_F3
                 bne _3
 
-                ;--lda CONSOL
+                lda CONSOL
                 eor #$02
-                ;--sta CONSOL
+                sta CONSOL
 
                 jmp _CleanUpXIT
 
@@ -114,9 +127,9 @@ _2r             pla
                 cmp #KEY_F3|$80
                 bne _3r
 
-                ;--lda CONSOL
+                lda CONSOL
                 ora #$02
-                ;--sta CONSOL
+                sta CONSOL
 
                 jmp _CleanUpXIT
 
@@ -125,9 +138,9 @@ _3              pla
                 cmp #KEY_F4
                 bne _4
 
-                ;--lda CONSOL
+                lda CONSOL
                 eor #$01
-                ;--sta CONSOL
+                sta CONSOL
 
                 jmp _CleanUpXIT
 
@@ -136,9 +149,9 @@ _3r             pla
                 cmp #KEY_F4|$80
                 bne _4r
 
-                ;--lda CONSOL
+                lda CONSOL
                 ora #$01
-                ;--sta CONSOL
+                sta CONSOL
 
                 jmp _CleanUpXIT
 
@@ -148,11 +161,11 @@ _4              pla
                 bne _5
 
                 lda InputFlags
-                bit #$01
+                bit #joyUP
                 beq _4a
 
-                eor #$01
-                ora #$02                ; cancel KEY_DOWN
+                eor #joyUP
+                ora #joyDOWN            ; cancel KEY_DOWN
                 sta InputFlags
 
 _4a             lda #itKeyboard
@@ -166,7 +179,7 @@ _4r             pla
                 bne _5r
 
                 lda InputFlags
-                ora #$01
+                ora #joyUP
                 sta InputFlags
 
                 jmp _CleanUpXIT
@@ -177,11 +190,11 @@ _5              pla
                 bne _6
 
                 lda InputFlags
-                bit #$02
+                bit #joyDOWN
                 beq _5a
 
-                eor #$02
-                ora #$01                ; cancel KEY_UP
+                eor #joyDOWN
+                ora #joyUP              ; cancel KEY_UP
                 sta InputFlags
 
 _5a             lda #itKeyboard
@@ -195,7 +208,7 @@ _5r             pla
                 bne _6r
 
                 lda InputFlags
-                ora #$02
+                ora #joyDOWN
                 sta InputFlags
 
                 jmp _CleanUpXIT
@@ -206,11 +219,11 @@ _6              pla
                 bne _7
 
                 lda InputFlags
-                bit #$04
+                bit #joyLEFT
                 beq _6a
 
-                eor #$04
-                ora #$08                ; cancel KEY_RIGHT
+                eor #joyLEFT
+                ora #joyRIGHT           ; cancel KEY_RIGHT
                 sta InputFlags
 
 _6a             lda #itKeyboard
@@ -224,7 +237,7 @@ _6r             pla
                 bne _7r
 
                 lda InputFlags
-                ora #$04
+                ora #joyLEFT
                 sta InputFlags
 
                 bra _CleanUpXIT
@@ -235,11 +248,11 @@ _7              pla
                 bne _8
 
                 lda InputFlags
-                bit #$08
+                bit #joyRIGHT
                 beq _7a
 
-                eor #$08
-                ora #$04                ; cancel KEY_LEFT
+                eor #joyRIGHT
+                ora #joyLEFT            ; cancel KEY_LEFT
                 sta InputFlags
 
 _7a             lda #itKeyboard
@@ -253,7 +266,7 @@ _7r             pla
                 bne _8r
 
                 lda InputFlags
-                ora #$08
+                ora #joyRIGHT
                 sta InputFlags
 
                 bra _CleanUpXIT
@@ -263,7 +276,7 @@ _8              pla
                 bne _XIT
 
                 lda InputFlags
-                eor #$10
+                eor #joyButton0
                 sta InputFlags
 
                 lda #itKeyboard
@@ -277,7 +290,7 @@ _8r             pla
                 bne _XIT
 
                 lda InputFlags
-                ora #$10
+                ora #joyButton0
                 sta InputFlags
 
                 stz KEYCHAR
@@ -286,34 +299,30 @@ _8r             pla
 _CleanUpXIT     stz KEYCHAR
                 pla
 
-_XIT            .m16i16
-                ply
+_XIT            ply
                 plx
                 pla
-
-                .m8i8
-                rtl
+                rts
                 .endproc
 
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-; VBI ROUTINE
+; Vertical Blank Interrupt (SOF)
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-VBIHandler      .proc
+irqVBIHandler   .proc
 KEY_SPACE       = $39
 ;---
 
-                php
-
-                .m16i16
                 pha
                 phx
                 phy
 
-                .m8i8
-                lda JIFFYCLOCK          ; increment the jiffy clock each VBI
-                inc A
-                sta JIFFYCLOCK
+                inc JIFFYCLOCK          ; increment the jiffy clock each VBI
+
+;   when already in joystick mode, bypass the override logic
+                lda InputType
+                cmp #itJoystick
+                beq _joyModeP1
 
                 lda JOYSTICK0           ; read joystick0
                 and #$1F
@@ -323,6 +332,11 @@ KEY_SPACE       = $39
                 sta InputFlags          ; joystick activity -- override keyboard input
                 lda #itJoystick
                 sta InputType
+
+                bra _pause
+
+_joyModeP1      lda JOYSTICK0           ; read joystick0
+                sta InputFlags
 
 _pause          lda KEYCHAR
                 cmp #KEY_SPACE          ; is spacebar?
@@ -415,7 +429,7 @@ _11             sta StarRotPos          ; save rot. pos.
 _12             ;ldy StarRotPos
                 ;ldx StarVertPos
 
-                .m16
+                ;!!.m16
                 lda StarHorzPos         ; set star's horiz. pos.
                 and #$FF                ; byte->word
                 asl A                   ; *2, account for double-pixel display
@@ -436,7 +450,7 @@ _12             ;ldy StarRotPos
                 tay
                 lda StarRotTbl,Y
                 sta SP01_ADDR
-                .m8
+                ;!!.m8
 
                 lda zpPlayerColorClock  ; is it time to change color?
                 cmp JIFFYCLOCK
@@ -450,7 +464,7 @@ _12             ;ldy StarRotPos
 _13             lda isHidePlayer        ; ok to show player?
                 bne _XIT                ;   no, exit VBI
 
-                .m16
+                ;!!.m16
                 lda PX                  ; set player's horizontal position
                 and #$FF                ; byte->word
                 asl A                   ; *2, account for double-pixel display
@@ -464,7 +478,7 @@ _13             lda isHidePlayer        ; ok to show player?
                 clc                     ; +32, account for off-screen border
                 adc #32+24-2            ; +24, account for playfield vertical displacement
                 sta SP00_Y_POS          ; -2, distance to player center
-                .m8
+                ;!!.m8
 
                 lda isPreventColorChange ; color change ok?
                 bne _XIT                ;   no, exit VBI
@@ -489,12 +503,9 @@ _nextColor      lda palColor0,X
 
                 jsr InitLUT
 
-_XIT            .m16i16
+_XIT            ;!!.m16i16
                 ply
                 plx
                 pla
-
-                .m8i8
-                plp
-                rtl
+                rts
                 .endproc

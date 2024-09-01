@@ -1,14 +1,13 @@
 
-                .cpu "65816"
+                .include "equates/system_f256.equ"
+                .include "equates/zeropage.equ"
+                .include "equates/game.equ"
 
-                .include "equates_system_c256.asm"
-                .include "equates_zeropage.asm"
-                .include "equates_game.asm"
+                .include "macros/f256_graphic.mac"
+                .include "macros/f256_mouse.mac"
+                .include "macros/f256_random.mac"
+                .include "macros/f256_sprite.mac"
 
-                .include "macros_65816.asm"
-                .include "macros_frs_graphic.asm"
-                .include "macros_frs_mouse.asm"
-                .include "macros_frs_random.asm"
 
             .enc "atari-screen"
                 .cdef " Z",$00
@@ -21,21 +20,36 @@
 
 ;--------------------------------------
 ;--------------------------------------
-                * = L8000-40
+                * = $6000
 ;--------------------------------------
+
+.if PGX=1
                 .text "PGX"
-                .byte $01
+                .byte $03
                 .dword BOOT
 
-BOOT            clc
-                xce
-                .m8i8
-                .setdp $0000
-                .setbank $00
-                cld
+; - - - - - - - - - - - - - - - - - - -
 
+.else
+                .byte $F2,$56           ; signature
+                .byte $03               ; block count
+                .byte $03               ; start at block1
+                .addr BOOT              ; execute address
+                .word $0001             ; version
+                .word $0000             ; kernel
+                .null 'Claim Jumper'    ; binary name
+.endif
+
+;--------------------------------------
+
+BOOT            cld                     ; clear decimal
+                ldx #$FF                ; initialize the stack
+                txs
                 jmp CART_START
 
+;--------------------------------------
+
+                .include "platform_f256.asm"
 
 ;--------------------------------------
 ;--------------------------------------
@@ -335,7 +349,7 @@ L8000           .byte $80,$80,$80,$80,$6C,$80,$80,$80,$80,$80,$80,$80,$80,$80,$9
 ;--------------------------------------
 
                 .include "music.asm"
-                .include "TITLE.asm"
+                .include "TITLE.inc"
 
 ;--------------------------------------
 
@@ -542,7 +556,7 @@ L9600           .byte $70,$70,$70,$70,$00,$00,$00,$00
                 .byte $68,$60,$60,$60,$60,$60,$60,$60
                 .byte $60,$60,$60,$60,$62,$61,$6E,$6B
 
-                .include "CHARSET.asm"
+                .include "CHARSET.inc"
 
 L9800           .byte $07,$07,$07,$07,$07,$07,$07,$07
                 .byte $07,$E7,$07,$66,$67,$68,$07,$E5
@@ -787,7 +801,7 @@ _next3          lda L39F2,X
                 .fill 7,$00
 ;--------------------------------------
 
-                .include "STAMPS.asm"
+                .include "STAMPS.inc"
                 .include "points.asm"
 
 ;--------------------------------------
@@ -1605,15 +1619,15 @@ LBFD0           .byte $07,$66,$67,$68,$07,$66,$67,$67
 ; Cartridge Initialization
 ;--------------------------------------
 ;--------------------------------------
-CART_INIT       rts
+; CART_INIT       rts
 
 ;--------------------------------------
 
-                .byte $00
+                ; .byte $00
 
 ;--------------------------------------
 ;--------------------------------------
 
-                .word CART_START
-                .byte $00,$04
-                .word CART_INIT
+                ; .word CART_START
+                ; .byte $00,$04
+                ; .word CART_INIT

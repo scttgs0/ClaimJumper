@@ -1,0 +1,51 @@
+
+;--------------------------------------
+; Zero-page equates
+;--------------------------------------
+
+L00A2               = $00A2
+L00A9               = $00A9
+
+zpXP0               = $00F0
+zpYP0               = $00F1
+zpXP1               = $00F2
+zpYP1               = $00F3
+zpXP2               = $00F4
+zpYP2               = $00F5
+zpYP                = $00F6
+zpYBAS              = $00F7
+zpXP                = $00F8
+zpSCDATA            = $00F9
+zpSCRL              = $00FA
+zpSCRH              = $00FB
+
+;--------------------------------------
+;--------------------------------------
+                * = $80
+;--------------------------------------
+
+JIFFYCLOCK          .byte ?
+
+InputFlags          .byte ?
+                    .byte ?
+InputType           .byte ?             ; Joystick/Keyboard for Player 1
+                    .byte ?             ; Joystick/Keyboard for Player 2
+itJoystick      = 0
+itKeyboard      = 1
+KEYCHAR             .byte ?             ; last key pressed
+CONSOL              .byte ?             ; state of OPTION,SELECT,START
+
+zpSource            .long ?             ; Starting address for the source data
+zpDest              .long ?             ; Starting address for the destination block
+zpSize              .long ?             ; Number of bytes to copy
+
+zpTemp1             .byte ?
+zpTemp2             .byte ?
+
+zpIndex1            .word ?
+zpIndex2            .word ?
+zpIndex3            .word ?
+
+RND_MIN             .byte ?
+RND_SEC             .byte ?
+RND_RESULT          .word ?
