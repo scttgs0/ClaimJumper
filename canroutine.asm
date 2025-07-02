@@ -9,6 +9,7 @@ CANROU          jsr FLASH
 
                 jmp _PRESNT
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ;--lda RANDOM
                 and #$0F                ; CHECK 4/SEC
                 bne _XIT1
@@ -38,13 +39,13 @@ _1              ;--lda RANDOM
                 dec zpSCRL
                 jsr SCTOXY_2
 
-                asl A
-                asl A
+                asl
+                asl
                 sta zpXP1
                 tya
-                asl A
-                asl A
-                asl A
+                asl
+                asl
+                asl
                 clc
                 adc #$09
                 sta zpYP1
@@ -57,6 +58,7 @@ _1              ;--lda RANDOM
 
 _XIT1           rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda zpYP1
                 sec
                 sbc zpYP2
@@ -67,6 +69,7 @@ _2              lda zpYP1
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _3              lda zpXP1
                 sec
                 sbc zpXP0
@@ -77,6 +80,7 @@ _3              lda zpXP1
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda zpXP1
                 sec
                 sbc zpXP2
@@ -87,6 +91,7 @@ _4              lda zpXP1
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _5              ldx #$FF
                 stx FRAMM
                 lda #$01
@@ -102,12 +107,15 @@ _5              ldx #$FF
                 sta DUR4
                 lda #$A0
                 ;--sta AUD4
+
 _XIT2           rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PRESNT         bpl _UNOWND
 
                 jmp _OWNED
 
+; - - - - - - - - - - - - - - - - - - -
 _UNOWND         lda CNTYPE
                 cmp #$FF
                 bne _NOWAIT
@@ -127,6 +135,7 @@ _UNOWND         lda CNTYPE
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _NOWAIT         ;--lda P1PL
                 and #$05
                 bne _CANCOL
@@ -146,8 +155,10 @@ _JEDGFL         jsr SETCAN
 
                 jmp _DR
 
+; - - - - - - - - - - - - - - - - - - -
 _UNORTS         rts
 
+; - - - - - - - - - - - - - - - - - - -
 _CANCOL         cmp #$05                ; SIMUL COLL?
                 bne _COL1
 
@@ -159,6 +170,7 @@ _CANCOL         cmp #$05                ; SIMUL COLL?
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _COL1           and #$01                ; P1 COLL?
                 beq _COLP2
 
@@ -177,6 +189,7 @@ _COL1           and #$01                ; P1 COLL?
 
 _ACQBL0         rts
 
+; - - - - - - - - - - - - - - - - - - -
 _COLP2          ;--lda P1PL
                 and #$04
                 beq _QC65
@@ -189,6 +202,7 @@ _COLP2          ;--lda P1PL
 
 _QC65           rts
 
+; - - - - - - - - - - - - - - - - - - -
 _QC6            lda #$81
                 sta STATCN
                 lda CNTYPE
@@ -198,6 +212,7 @@ _QC6            lda #$81
 
 _ACQBL2         rts
 
+; - - - - - - - - - - - - - - - - - - -
 _OWNED          jsr PRESTO
 
                 lda STATCN
@@ -225,18 +240,22 @@ _OWNED          jsr PRESTO
 
                 jmp _DR
 
+; - - - - - - - - - - - - - - - - - - -
 _Q56            ;--lda STRIG0
                 bne _DR
 
                 ldx #$00
                 jmp _SAVTES
 
+; - - - - - - - - - - - - - - - - - - -
 _P0SAVD         inc SCOR0
                 ldx SCOR0
                 lda #$88                ; SMASHD CAN
                 sta L1FB3,X
+
                 jmp _ENCAN
 
+; - - - - - - - - - - - - - - - - - - -
 _P2OWN          jsr SETCAN
                 jsr ERASE_2
 
@@ -258,6 +277,7 @@ _P2OWN          jsr SETCAN
 
                 jmp _DR
 
+; - - - - - - - - - - - - - - - - - - -
 _Q58            ;--lda STRIG1
                 bne _DR
 
@@ -277,7 +297,7 @@ _SAVTES         lda #$01
                 lda zpXP1
                 cmp #$3B
                 bcs _TRYP2
-                bcc _P0SAVD             ; UNC
+                bcc _P0SAVD             ; [unc]
 
 _TRYP2          cmp #$BE
                 bcc _LOSE
@@ -293,11 +313,13 @@ _LOSE           lda #$01
 
                 jmp _DR
 
+; - - - - - - - - - - - - - - - - - - -
 _P2BEL          jsr SNBPV3_2
 _DR             jsr DRAWCN
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _P2SAVD         inc SCOR2
                 lda SCOR2
                 eor #$FF
@@ -317,6 +339,7 @@ _ENCAN          jsr SETCAN
                 sta MCNT4
                 lda #$FF
                 sta FRAMM
+
                 rts
 
 
@@ -342,11 +365,13 @@ EDGFLY          .proc
 
                 jmp _VERFLY
 
+; - - - - - - - - - - - - - - - - - - -
 _ONEDIR         ;--lda RANDOM
                 bpl HORFLY
 
                 jmp _VERFLY
 
+; - - - - - - - - - - - - - - - - - - -
 _VERFLY         ;--lda RANDOM
                 bpl _SUBHOR
 
@@ -358,6 +383,7 @@ _VERFLY         ;--lda RANDOM
                 sbc #$28
                 jmp _YSTOR
 
+; - - - - - - - - - - - - - - - - - - -
 _SUBHOR         lda zpYP0,X
                 sbc #$10
                 cmp #$28                ; YMIN
@@ -366,6 +392,7 @@ _SUBHOR         lda zpYP0,X
                 adc #$28
 _YSTOR          sta zpYP1
                 sta zpYP
+
                 rts
                 .endproc
 
@@ -385,6 +412,7 @@ HORFLY          .proc
                 sbc #$15
                 jmp _XSTOR
 
+; - - - - - - - - - - - - - - - - - - -
 _SUBVER         lda zpXP0,X
                 sbc #$09
                 cmp #$34                ; XMIN
@@ -393,6 +421,7 @@ _SUBVER         lda zpXP0,X
                 adc #$15
 _XSTOR          sta zpXP1
                 ;--sta HPOSP1
+
                 rts
                 .endproc
 
@@ -443,8 +472,10 @@ PRESTO          .proc
                 sta zpXP1
                 pla
                 pla
+
 _PRTS           rts
 
+; - - - - - - - - - - - - - - - - - - -
 _BILL           ;--lda M1PL
                 and #$02
                 beq _PRTS
@@ -475,7 +506,7 @@ _Q76            sta ScreenFooter+25,Y
                 bne _Q76
 
                 ldx #$01
-                bne STOHOU.L9E9B        ; UNC
+                bne STOHOU.L9E9B        ; [unc]
 
                 .endproc
 
@@ -498,6 +529,7 @@ L9E9B           lda #$0A
 
                 lda #$00
                 sta STATCN
+
                 rts
                 .endproc
 
@@ -512,6 +544,7 @@ DRSCAL          .proc
                 lda #$00
                 sta PMSTOR
                 sta PMSTOR+3
+
                 rts
                 .endproc
 
@@ -527,6 +560,7 @@ DRSTOR          .proc
                 lda PMSCAL
                 and #$F3
                 sta PMSCAL
+
                 rts
                 .endproc
 
@@ -559,6 +593,7 @@ _next1          ;--lda RANDOM
                 tay
                 sty zpSCRH+4
                 sta (zpSCRL+4),Y
+
                 rts
                 .endproc
 
@@ -593,6 +628,7 @@ SETCAN          .proc
                 ;--sta HPOSP1
                 lda zpYP1
                 sta zpYP
+
                 rts
                 .endproc
 
@@ -606,6 +642,7 @@ ABSVAL          .proc
                 eor #$FF
                 clc
                 adc #$01
+
 _QPL            rts
                 .endproc
 
@@ -618,6 +655,7 @@ SNBPV1_2        .proc
                 ;--sta AUD1
                 lda #$80
                 sta DUR1
+
                 rts
                 .endproc
 
@@ -630,6 +668,7 @@ SNBPV3_2        .proc
                 ;--sta AUD3
                 lda #$80
                 sta DUR3
+
                 rts
                 .endproc
 
@@ -644,7 +683,7 @@ SCTOXY_2        .proc
                 tax
                 lda zpSCRL
                 ldy #$02
-                bne _X2                 ; UNC
+                bne _X2                 ; [unc]
 
 _SUB40A         iny
                 sbc #$28
@@ -661,6 +700,7 @@ _SUB40B         iny
 
                 sec
                 sbc #$0D
+
                 rts
                 .endproc
 
@@ -698,8 +738,10 @@ _COLOK          lda STATCN
                 ;--sta HPOSM1
                 lda #$1C
                 sta scrnL02C24
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _FBILL          lda FRAME
                 and #$08
                 beq _TRIIN
@@ -725,8 +767,10 @@ _P2ON           ldx #$1E
 
 _STORE          lda #$7F
                 ;--sta HPOSM1
+
 _FRTS           rts
 
+; - - - - - - - - - - - - - - - - - - -
 _TRIIN          lda #$07
                 sta L1F8C
                 sta L1FAB
@@ -734,8 +778,10 @@ _M1OFF          lda #$00
                 ;--sta HPOSM1
                 lda #$07
                 sta scrnL02C24
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 ;---
 ;--- junk
 
@@ -763,6 +809,7 @@ _M1OFF          lda #$00
                 iny
                 tya
                 sta (zpSCRL,X)
+
                 rts
 
 ;--------------------------------------

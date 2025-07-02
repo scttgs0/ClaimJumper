@@ -19,6 +19,7 @@ BUL0            .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ;--lda M0PL
                 and #$04
                 bne _2
@@ -54,20 +55,25 @@ _2              lda #$00
                 sta DUR3
                 lda #$A0
                 ;--sta AUD3
+
 _3              rts
 
+; - - - - - - - - - - - - - - - - - - -
 _4              ;--lda M0PF
                 bne _5
 
                 jmp Q70
 
+; - - - - - - - - - - - - - - - - - - -
 _5              and #$0B
                 beq _6
 
                 ldx #$00
                 stx BHITFL
+
                 jmp HITROU
 
+; - - - - - - - - - - - - - - - - - - -
 _6              lda YM0
                 cmp #$50
                 bcs Q70
@@ -112,12 +118,14 @@ _9              lda XM0
 
                 jmp Q70
 
+; - - - - - - - - - - - - - - - - - - -
 _10             lda STBUL0
                 cmp #$82
                 beq _11
 
                 jmp Q70
 
+; - - - - - - - - - - - - - - - - - - -
 _11             lda #$01
                 sta STBUL0
                 bne BOUNC0
@@ -133,7 +141,7 @@ Q70             .proc
                 lda STBUL0
                 bmi SIDEW0
 
-                lsr A
+                lsr
                 bcc _1
 
                 jsr ERSM0
@@ -149,6 +157,7 @@ _LA01A          lda YM0
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr ERSM0
 
                 lda YM0
@@ -162,10 +171,12 @@ _1              jsr ERSM0
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _OFFSC1         jsr ERSM0
 
 _2              lda #$00
                 sta STBUL0
+
                 rts
                 .endproc
 
@@ -174,7 +185,7 @@ _2              lda #$00
 ;
 ;--------------------------------------
 SIDEW0          .proc
-                lsr A
+                lsr
                 bcc _1
 
                 lda XM0
@@ -185,8 +196,10 @@ SIDEW0          .proc
 
                 sta XM0
                 ;--sta HPOSM0
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda XM0
                 sec
                 sbc #$03
@@ -195,6 +208,7 @@ _1              lda XM0
 
                 sta XM0
                 ;--sta HPOSM0
+
                 rts
                 .endproc
 
@@ -244,6 +258,7 @@ BUL2            .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ;--lda M2PL
                 and #$01
                 bne _2
@@ -282,18 +297,22 @@ _2              lda #$00
 
 _XIT1           rts
 
+; - - - - - - - - - - - - - - - - - - -
 _3              ;--lda M2PF
                 bne _4
 
                 jmp W70
 
+; - - - - - - - - - - - - - - - - - - -
 _4              and #$0B
                 beq _5
 
                 ldx #$02
                 stx BHITFL
+
                 jmp HITROU
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda YM2
                 cmp #$50
                 bcs W70
@@ -338,12 +357,14 @@ _8              lda XM2
 
                 jmp W70
 
+; - - - - - - - - - - - - - - - - - - -
 _9              lda STBUL2
                 cmp #$82
                 beq _10
 
                 jmp W70
 
+; - - - - - - - - - - - - - - - - - - -
 _10             lda #$01
                 sta STBUL2
                 bne BOUNC2
@@ -366,7 +387,7 @@ W70             .proc
                 lda STBUL2
                 bmi SIDEW2
 
-                lsr A
+                lsr
                 bcc _1
 
                 jsr ERSM2
@@ -382,6 +403,7 @@ W70             .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jsr ERSM2
 
                 lda YM2
@@ -395,10 +417,12 @@ _1              jsr ERSM2
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _OFFSC3         jsr ERSM2
 
 _2              lda #$00
                 sta STBUL2
+
                 rts
                 .endproc
 
@@ -407,7 +431,7 @@ _2              lda #$00
 ;
 ;--------------------------------------
 SIDEW2          .proc
-                lsr A
+                lsr
                 bcc _1
 
                 lda XM2
@@ -418,8 +442,10 @@ SIDEW2          .proc
 
                 sta XM2
                 ;--sta HPOSM2
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda XM2
                 sec
                 sbc #$03
@@ -428,6 +454,7 @@ _1              lda XM2
 
                 sta XM2
                 ;--sta HPOSM2
+
                 rts
                 .endproc
 
@@ -477,11 +504,13 @@ HITROU          .proc
 
                 jmp IGNOR
 
+; - - - - - - - - - - - - - - - - - - -
 _1              cmp #$03
                 bne _2
 
                 jmp IGNOR
 
+; - - - - - - - - - - - - - - - - - - -
 _2              and #$01
                 eor #$01
                 sta HITCOL
@@ -489,15 +518,15 @@ _2              and #$01
                 lda XM0,Y
                 sec
                 sbc #$04                ; OFFSET
-                lsr A
-                lsr A
+                lsr
+                lsr
                 sta XMS
                 lda YM0,Y
                 sec
                 sbc #$08                ; OFFSET
-                lsr A
-                lsr A
-                lsr A
+                lsr
+                lsr
+                lsr
                 sta YMS
 
                 ldy #$0F
@@ -509,7 +538,7 @@ _next1          lda Z0X,Y
 
 _next2          dey
                 bmi _TRYY
-                bpl _next1              ; UNC
+                bpl _next1              ; [unc]
 
 _3              lda Z0Y,Y
                 sec
@@ -522,7 +551,7 @@ _3              lda Z0Y,Y
                 lda DIRPZ0,Y
                 cmp #$01
                 beq _TCOLOR
-                bne _next2             ; UNC
+                bne _next2             ; [unc]
 
 _4              cmp #$01
                 bne _next2
@@ -530,7 +559,7 @@ _4              cmp #$01
                 lda DIRPZ0,Y
                 cmp #$81
                 beq _TCOLOR
-                bne _next2             ; UNC
+                bne _next2             ; [unc]
 
 _TRYY           ldy #$0F
 _next3          lda Z0Y,Y
@@ -541,7 +570,7 @@ _next3          lda Z0Y,Y
 
 _next4          dey
                 bmi _6
-                bpl _next3              ; UNC
+                bpl _next3              ; [unc]
 
 _CHEKX          lda Z0X,Y
                 sec
@@ -552,7 +581,7 @@ _CHEKX          lda Z0X,Y
                 lda DIRPZ0,Y
                 cmp #$00
                 beq _TCOLOR
-                bne _next4             ; UNC
+                bne _next4             ; [unc]
 
 _5              cmp #$01
                 bne _next4
@@ -560,10 +589,11 @@ _5              cmp #$01
                 lda DIRPZ0,Y
                 cmp #$80
                 beq _TCOLOR
-                bne _next4             ; UNC
+                bne _next4             ; [unc]
 
 _6              jmp IGNOR
 
+; - - - - - - - - - - - - - - - - - - -
 _TCOLOR         lda SCRLZ0,Y            ; NOW Y=SNK# HIT
                 sta zpSCRL
                 lda SCRHZ0,Y
@@ -594,7 +624,7 @@ _TCOLOR         lda SCRLZ0,Y            ; NOW Y=SNK# HIT
                 pla
                 clc
                 adc #$20
-                bne _7                  ; UNC
+                bne _7                  ; [unc]
 
 _TESTUM         ldx BHITFL
                 beq ASBEF
@@ -628,7 +658,7 @@ ASBEF           .proc
                 lda #$00
                 sta (zpSCRL,X)
                 lda BHITFL
-                lsr A
+                lsr
                 clc
                 adc #$03
                 ldx #$00
@@ -654,6 +684,7 @@ HITDUN          .proc
 
                 jmp W70._OFFSC3         ; LEAVE BUL2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jmp Q70._OFFSC1         ; LEAVE BUL0
 
                 .endproc
@@ -668,6 +699,7 @@ IGNOR           .proc
 
                 jmp W70
 
+; - - - - - - - - - - - - - - - - - - -
 _1              jmp Q70
 
                 .endproc
@@ -689,6 +721,7 @@ WIDEN0          .proc
                 lda MBAS6,Y
                 and #$FC
                 sta MBAS6,Y
+
                 rts
                 .endproc
 
@@ -709,6 +742,7 @@ WIDEN2          .proc
                 lda MBAS6,Y
                 and #$CF
                 sta MBAS6,Y
+
                 rts
                 .endproc
 
@@ -721,6 +755,7 @@ QSN1            .proc
                 ;--sta AUD2
                 lda #$50
                 sta DUR2
+
                 rts
                 .endproc
 
@@ -733,6 +768,7 @@ QSN2            .proc
                 ;--sta AUD4
                 lda #$60
                 sta DUR4
+
                 rts
                 .endproc
 
@@ -750,9 +786,11 @@ PLUS            .proc
                 adc #$00
                 sta DIGH0,X
                 cld
+
                 rts
                 .endproc
 
+; - - - - - - - - - - - - - - - - - - -
 ;---
 ;--- junk
 

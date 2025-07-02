@@ -30,19 +30,19 @@ POINTS          .proc
 ;======================================
 SEPAR           .proc
                 lda DIGH0,X             ; 0/2
-                lsr A
-                lsr A
-                lsr A
-                lsr A
+                lsr
+                lsr
+                lsr
+                lsr
                 sta SEP_+0
                 lda DIGH0,X
                 and #$0F
                 sta SEP_+1
                 lda DIGL0,X
-                lsr A
-                lsr A
-                lsr A
-                lsr A
+                lsr
+                lsr
+                lsr
+                lsr
                 sta SEP_+2
                 lda DIGL0,X
                 and #$0F
@@ -95,6 +95,7 @@ _CHEK50         sed
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PTWIN          pla
                 pla
                 pla
@@ -117,19 +118,19 @@ _ENLOOP         jsr ENDFR
                 jsr FLHIGH
 
                 lda HFLAG
-                lsr A
+                lsr
                 bne _ENLOOP
 
                 lda #$08                ; TEST SEL BUT
                 ;--sta CONSOL
                 ;--lda CONSOL
-                lsr A
-                lsr A
+                lsr
+                lsr
                 bcc _PUSHTC
 
                 lda #$00
                 sta SELFLG
-                beq _ENLOOP             ; UNC
+                beq _ENLOOP             ; [unc]
 
 _PUSHTC         lda SELFLG
                 beq _GOON
@@ -148,15 +149,16 @@ FLHIGH          .proc
                 lda FRAME
                 and #$08
                 bne _FLH
-                beq CLRFL               ; UNC
+                beq CLRFL               ; [unc]
 
 _FLRTS          rts
 
+; - - - - - - - - - - - - - - - - - - -
 _FLH            lda DIGH0
                 cmp DIGH2
                 beq _TRYLOW
                 bcs _FLP0
-                bcc _FLP2               ; UNC
+                bcc _FLP2               ; [unc]
 
 _TRYLOW         lda DIGL0
                 cmp DIGL2
@@ -165,10 +167,13 @@ _TRYLOW         lda DIGL0
 
 _FLP2           lda #$55
                 sta L1FF4
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _FLP0           lda #$7F
                 sta L1FE3
+
                 rts
                 .endproc
 
@@ -180,6 +185,7 @@ CLRFL           .proc
                 lda #$00
                 sta L1FE3
                 sta L1FF4
+
                 rts
                 .endproc
 

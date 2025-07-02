@@ -20,6 +20,7 @@ MOV0            lda #$0C                ; P0BAS
                 sta TRG0FL
 _JJST0          jmp _ST0
 
+; - - - - - - - - - - - - - - - - - - -
 _PUSHT0         lda TRG0FL
                 bne _JJST0
 
@@ -44,19 +45,19 @@ _PUSHT0         lda TRG0FL
                 bne _Q02
 
                 ldx #$02                ; UP
-                bne _CORDM0             ; UNC
+                bne _CORDM0             ; [unc]
 
 _Q02            cmp #$0D
                 bne _Q03
 
                 ldx #$01                ; DOWN
-                bne _CORDM0             ; UNC
+                bne _CORDM0             ; [unc]
 
 _Q03            and #$04
                 bne _Q04
 
                 ldx #$82                ; LEFT
-                bne _CORDM0             ; UNC
+                bne _CORDM0             ; [unc]
 
 _Q04            ldx #$81                ; RIGHT
 _CORDM0         lda STUK0
@@ -98,8 +99,10 @@ _NPH0           lda zpXP0
 
 _JST0           jmp _ST0
 
+; - - - - - - - - - - - - - - - - - - -
 _NODRP0         jmp _NDRP0
 
+; - - - - - - - - - - - - - - - - - - -
 _Q61            jsr XPYPSC
 
                 ldy #$00
@@ -151,6 +154,7 @@ _ST0            lda STUK0
 
                 jmp _Q25
 
+; - - - - - - - - - - - - - - - - - - -
 _Q66            lda #$3F                ; UNSTUK
                 sta CHANC0
                 lda #$1E
@@ -159,13 +163,13 @@ _Q20            lda STUK0
                 bpl _QX20
 
                 jsr DRHIT
-
                 jmp _BACK2
 
+; - - - - - - - - - - - - - - - - - - -
 _QX20           jsr DRSTUK
-
                 jmp _BACK2
 
+; - - - - - - - - - - - - - - - - - - -
 _COLL0          ;--lda P0PF
                 and #$01
                 beq _Q28
@@ -183,15 +187,17 @@ _COLL0          ;--lda P0PF
 
                 jsr SN3V1               ; FROZ
                 jsr DRSTUK
-
                 jmp _BACK2
 
+; - - - - - - - - - - - - - - - - - - -
 _Q21            cmp #$1E
                 beq _Q22
 
                 dec IMMUN0
+
 _Q22            jmp _STMOV0
 
+; - - - - - - - - - - - - - - - - - - -
 _Q28            lda IMMUN0
                 beq _STMOV0
 
@@ -223,8 +229,9 @@ DRHIT           .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _DHIT           ldx #$7F
-                bne DRMVNG._DRW         ; UNC
+                bne DRMVNG._DRW         ; [unc]
 
                 .endproc
 
@@ -239,8 +246,9 @@ DRSTUK          .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _DRNOMV         ldx #$0F
-                bne DRMVNG._DRW         ; UNC
+                bne DRMVNG._DRW         ; [unc]
 
                 .endproc
 
@@ -334,8 +342,10 @@ _DRM3LP         lda (zpYP),Y
                 bpl _DRM3LP
 
                 inc zpYBAS
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _DRP3           inc zpYBAS              ; P2 TO P3
 _DRP3LP         lda FLESH,X
                 sta (zpYP),Y
@@ -344,8 +354,10 @@ _DRP3LP         lda FLESH,X
                 bpl _DRP3LP
 
                 dec zpYBAS
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _UPORDN         ldx #$1F
                 lda zpYP
                 and #$02
@@ -378,8 +390,10 @@ MOV2            lda #$0E
 
                 lda #$00
                 sta TRG1FL
+
 _JJST2          jmp _ST2
 
+; - - - - - - - - - - - - - - - - - - -
 _PUSHT2         lda TRG1FL
                 bne _JJST2
 
@@ -404,19 +418,19 @@ _PUSHT2         lda TRG1FL
                 bne _W02
 
                 ldx #$02                ; UP
-                bne _CORDM2             ; UNC
+                bne _CORDM2             ; [unc]
 
 _W02            cmp #$0D
                 bne _W03
 
                 ldx #$01                ; DOWN
-                bne _CORDM2             ; UNC
+                bne _CORDM2             ; [unc]
 
 _W03            and #$04
                 bne _W04
 
                 ldx #$82                ; LEFT
-                bne _CORDM2             ; UNC
+                bne _CORDM2             ; [unc]
 
 _W04            ldx #$81                ; RIGHT
 _CORDM2         lda STUK2
@@ -458,8 +472,10 @@ _NPH2           lda zpXP2
 
 _JST2           jmp _ST2
 
+; - - - - - - - - - - - - - - - - - - -
 _NODRP2         jmp _NDRP2
 
+; - - - - - - - - - - - - - - - - - - -
 _W61            jsr XPYPSC
 
                 ldy #$00
@@ -492,7 +508,7 @@ _SIX2           ldx NUMBT2
                 sta L06D0,X
                 lda zpSCRH
                 sta L06D8,X
-                bne _ST2                ; UNC
+                bne _ST2                ; [unc]
 
 _NDRP2          jsr SNBPV3
 
@@ -508,9 +524,9 @@ _ST2            lda STUK2
                 lda #$20
                 sta STUK2
                 jsr DOCT2
-
                 jmp _W25
 
+; - - - - - - - - - - - - - - - - - - -
 _W66            lda #$3F                ; UNSTUK
                 sta CHANC2
                 lda #$1E
@@ -519,13 +535,13 @@ _W20            lda STUK2
                 bpl _WX20
 
                 jsr DRHIT
-
                 jmp _SQRDUN
 
+; - - - - - - - - - - - - - - - - - - -
 _WX20           jsr DRSTUK
-
                 jmp _SQRDUN
 
+; - - - - - - - - - - - - - - - - - - -
 _COLL2          ;--lda P2PF
                 and #$02
                 beq _W28
@@ -543,15 +559,17 @@ _COLL2          ;--lda P2PF
 
                 jsr SN4V3               ; FROZ
                 jsr DRSTUK
-
                 jmp _SQRDUN
 
+; - - - - - - - - - - - - - - - - - - -
 _W21            cmp #$1E
                 beq _W22
 
                 dec IMMUN2
+
 _W22            jmp _STMOV2
 
+; - - - - - - - - - - - - - - - - - - -
 _W28            lda IMMUN2
                 beq _STMOV2
 
@@ -599,17 +617,19 @@ _DOCTX          and #$0C
 
 _LFDOC          lda #$35
                 sta zpXP
-                bne _DOCDUN             ; UNC
+                bne _DOCDUN             ; [unc]
 
 _RTDOC          lda #$C1
                 sta zpXP
 _DOCDUN         lda #$29
                 sta zpYP
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _RANDOC         ;--lda RANDOM
                 bmi _RTDOC
-                bpl _LFDOC              ; UNC
+                bpl _LFDOC              ; [unc]
 
                 .endproc
 
@@ -627,10 +647,11 @@ MOVEZZ          inc GROUP
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _GRP0           lda #$00
                 sta GROUP
-_GRPOK          asl A
-                asl A
+_GRPOK          asl
+                asl
                 tay
 _Q16            lda Z0X,Y
                 beq _NEXTZ
@@ -663,6 +684,7 @@ SCDEC0          .proc
                 lda #$00
                 ldx NUMBL0
                 sta ScreenFooter+4,X
+
                 rts
                 .endproc
 
@@ -677,6 +699,7 @@ SCDEC2          .proc
                 tax
                 lda #$00
                 sta ScreenFooter+25,X
+
                 rts
                 .endproc
 
@@ -686,13 +709,13 @@ SCDEC2          .proc
 ;======================================
 XPYPSC          .proc
                 lda zpXP
-                lsr A
-                lsr A
+                lsr
+                lsr
                 tax
                 lda zpYP
-                lsr A
-                lsr A
-                lsr A
+                lsr
+                lsr
+                lsr
                 tay
                 tya
                 sec
@@ -712,6 +735,7 @@ _X3             dey
                 bne _ADD40B
 
                 sta zpSCRL
+
                 rts
                 .endproc
 
@@ -739,8 +763,10 @@ _ERM3LP         lda (zpYP),Y
                 bpl _ERM3LP
 
                 inc zpYBAS
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _ERSP3          inc zpYBAS              ; P2 TO P3
                 lda #$00
 _ERP3LP         sta (zpYP),Y
@@ -748,6 +774,7 @@ _ERP3LP         sta (zpYP),Y
                 bpl _ERP3LP
 
                 dec zpYBAS
+
                 rts
                 .endproc
 
@@ -796,11 +823,19 @@ _RIGHT          ror STSHFT
 
                 dex
 _EDJOKR         stx zpXP
+
 _UPDONE         rts
 
                 .endproc
 
+
+;--------------------------------------
+;--------------------------------------
 JMOV2           jmp MOV2
+
+
+;--------------------------------------
+;--------------------------------------
 JMOVZ           jmp MOVEZZ
 
 
@@ -817,25 +852,30 @@ PITPAT          .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PIT0           lda #$00
                 ;--sta AUD1
                 lda #$0E
                 sta DUR1
                 lda #$32
                 sta SMOOTH
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PL2PIT         lda DUR3
                 beq _PIT2
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PIT2           lda #$20
                 ;--sta AUD3
                 lda #$0E
                 sta DUR3
                 lda #$42
                 sta SMOOTH
+
                 rts
                 .endproc
 
@@ -848,6 +888,7 @@ SN1V1           .proc
                 ;--sta AUD1
                 lda #$40
                 sta DUR1
+
                 rts
                 .endproc
 
@@ -860,6 +901,7 @@ SN1V3           .proc
                 ;--sta AUD3
                 lda #$10
                 sta DUR3
+
                 rts
                 .endproc
 
@@ -872,6 +914,7 @@ SN2V1           .proc
                 ;--sta AUD1
                 lda #$20
                 sta DUR1
+
                 rts
                 .endproc
 
@@ -884,6 +927,7 @@ SN2V3           .proc
                 ;--sta AUD3
                 lda #$20
                 sta DUR3
+
                 rts
                 .endproc
 
@@ -896,6 +940,7 @@ SN3V1           .proc
                 ;--sta AUD1
                 lda #$30
                 sta DUR1
+
                 rts
                 .endproc
 
@@ -907,6 +952,7 @@ SN4V3           lda #$C0                ; PL2 BZ
                 ;--sta AUD3
                 lda #$30
                 sta DUR3
+
                 rts
 
 
@@ -918,6 +964,7 @@ SNBPV1          .proc
                 ;--sta AUD1
                 lda #$80
                 sta DUR1
+
                 rts
                 .endproc
 
@@ -930,6 +977,7 @@ SNBPV3          .proc
                 ;--sta AUD3
                 lda #$80
                 sta DUR3
+
                 rts
                 .endproc
 
@@ -958,6 +1006,7 @@ _COMLP          lda L06C2,X
 _XIT            rts
 
 
+; - - - - - - - - - - - - - - - - - - -
 ;---
 ;--- junk
                 sta L06C9,X
@@ -970,6 +1019,7 @@ _XIT            rts
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
                 sta L06C9,X
                 inx
                 dey

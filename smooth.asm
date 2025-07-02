@@ -28,8 +28,10 @@ SMOOTH          .proc
                 iny
                 tya
                 sta (zpSCRL,X)
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _NEG            ldx #$00
                 lda (zpSCRL,X)
                 and #$0F
@@ -51,8 +53,10 @@ _NEG            ldx #$00
                 dey
                 tya
                 sta (zpSCRL,X)
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _NEWDIR         jsr FNEWDR
 
                 ldx #$04
@@ -64,6 +68,7 @@ _NEWDIR         jsr FNEWDR
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _Q5             ldx #$00
                 asl SMOOTH,X
                 lda (zpSCRL,X)
@@ -73,7 +78,7 @@ _Q5             ldx #$00
                 ldy #$00
                 sty ADCOLP              ; SNK
                 sty ADCOLN
-                bcc _Q13                ; UNC
+                bcc _Q13                ; [unc]
 
 _RED            ldy #$20
                 sty ADCOLP
@@ -92,7 +97,7 @@ _QSM03          jsr SN5V2
 
                 ldy #$20
                 sty ADCOLN
-                bne _GOMOVE             ; UNC
+                bne _GOMOVE             ; [unc]
 
 _Q43            cmp #$02
                 beq _Q44
@@ -135,8 +140,10 @@ _LA3EE          jsr FINDSC              ; OLDSC
                 inc ZY_
                 lda #$81
                 sta DIRP
+
                 jmp _NEWDUN
 
+; - - - - - - - - - - - - - - - - - - -
 _Q7             ldx #$00
                 lda #$21                ; RIGHT
                 clc
@@ -149,8 +156,10 @@ _Q7             ldx #$00
                 inc ZX_
                 lda #$80
                 sta DIRP
+
                 jmp _NEWDUN
 
+; - - - - - - - - - - - - - - - - - - -
 _Q6             and #$01                ; LEFT
                 bne _Q8
 
@@ -166,8 +175,10 @@ _Q6             and #$01                ; LEFT
                 dec ZX_
                 lda #$00
                 sta DIRP
+
                 jmp _NEWDUN
 
+; - - - - - - - - - - - - - - - - - - -
 _Q8             ldx #$00                ; UP
                 lda #$18
                 clc
@@ -191,6 +202,7 @@ _NEWDUN         ldy SAVEZ
                 sta SCRLZ0,Y
                 lda zpSCRH+4
                 sta SCRHZ0,Y
+
                 rts
                 .endproc
 
@@ -214,8 +226,10 @@ FINDSC          .proc
                 bcc _Q12
 
                 inc zpSCRH,X
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _FDWN           lda zpSCRL
                 clc
                 adc #$28
@@ -223,8 +237,10 @@ _FDWN           lda zpSCRL
                 bcc _Q12
 
                 inc zpSCRH,X
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _FNEG           and #$01
                 beq _FLEFT
 
@@ -235,8 +251,10 @@ _FNEG           and #$01
                 bcs _Q12
 
                 dec zpSCRH,X
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _FLEFT          lda zpSCRL
                 sec
                 sbc #$01
@@ -244,6 +262,7 @@ _FLEFT          lda zpSCRL
                 bcs _Q12
 
                 dec zpSCRH,X
+
 _Q12            rts
                 .endproc
 
@@ -265,8 +284,10 @@ _QSS1           ;--lda RANDOM
                 ;--lda RANDOM
                 and #$81
                 sta DIRZF
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _Q19            ldx #$00
                 lda (zpSCRL,X)
                 cmp #$2C
@@ -278,17 +299,17 @@ _Q19            ldx #$00
 _Q14            ldy #$04
 _Q15            sty PNUM
                 lda zpXP0,Y
-                lsr A
-                lsr A
+                lsr
+                lsr
                 sec
                 sbc ZX_
                 jsr ABSX
 
                 sta XDIF
                 lda zpYP0,Y
-                lsr A
-                lsr A
-                lsr A
+                lsr
+                lsr
+                lsr
                 sec
                 sbc ZY_
                 jsr ABSX
@@ -313,12 +334,16 @@ _Q17            inc PROB
                 lda PROB
                 eor #$FF
                 sta PROB
+
                 jmp _Q18
 
+; - - - - - - - - - - - - - - - - - - -
 _DIFEQ          lda #$7F
                 sta PROB
+
                 jmp _Q18
 
+; - - - - - - - - - - - - - - - - - - -
 _XBIG           sta YDIF
                 lda XDIF
 _XBIGLP         asl YDIF
@@ -336,34 +361,41 @@ _Q18            ldy PNUM
                 bcc _FDIRX
 
                 lda zpYP0,Y
-                lsr A
-                lsr A
-                lsr A
+                lsr
+                lsr
+                lsr
                 sec
                 sbc ZY_
                 bpl _Q2
 
                 lda #$81
                 sta DIRZF
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _Q2             lda #$01
                 sta DIRZF
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _FDIRX          lda zpXP0,Y
-                lsr A
-                lsr A
+                lsr
+                lsr
                 sec
                 sbc ZX_
                 bpl _Q3
 
                 lda #$80
                 sta DIRZF
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _Q3             lda #$00
                 sta DIRZF
+
                 rts
                 .endproc
 
@@ -377,6 +409,7 @@ ABSX            .proc
                 eor #$FF
                 clc
                 adc #$01
+
 _Q1             rts
                 .endproc
 
@@ -392,8 +425,10 @@ SN5V2           .proc
                 ;--sta AUD2
                 lda #$70
                 sta DUR2
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _QSN1           lda #$A0                ; SNK
                 ;--sta AUD2                ; TO TUM
                 lda #$50
@@ -417,8 +452,10 @@ SN6V4           .proc
                 ;--sta AUD4
                 lda #$70
                 sta DUR4
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _QSN2           lda #$A0                ; TUM
                 ;--sta AUD4                ; TO SNK
                 lda #$60
@@ -438,7 +475,7 @@ SMASH0          .proc
                 txa
                 tay
                 beq DEBUG
-                bne SMASH2._TESLP       ; UNC
+                bne SMASH2._TESLP       ; [unc]
 
                 .endproc
 
@@ -497,6 +534,7 @@ PLUS_           .proc
                 adc #$00
                 sta DIGH0,X
                 cld
+
                 rts
                 .endproc
 

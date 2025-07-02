@@ -74,12 +74,12 @@ PROCES          .proc
                 iny
                 inc NoteNumber,X
                 lda (zpSCRL+4),Y
-_DOTOK          lsr A
-                lsr A
-                lsr A
-                lsr A
-                lsr A
-                lsr A
+_DOTOK          lsr
+                lsr
+                lsr
+                lsr
+                lsr
+                lsr
                 sta NoteDURCOD
                 lda (zpSCRL+4),Y
                 and #$3F
@@ -92,7 +92,7 @@ _DOTOK          lsr A
                 ldy DOTFL
                 beq _SAMNOT
 
-                lsr A
+                lsr
                 clc
                 adc NoteDuration,X
                 sta NoteDuration,X
@@ -120,8 +120,10 @@ _SAMNOT         dec NoteDuration,X
 
                 lda #$A7
 _DUN            ;--sta AUDC1,X
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _REST           lda #$A0
                 bne _DUN
 

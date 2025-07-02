@@ -27,8 +27,10 @@ _NXVOI          lda MCNT1,X
                 dec VOL1,X
 _STOVOL         lda VOL1,X
                 ;--sta AUDC1,X
+
                 jmp _DECVOI
 
+; - - - - - - - - - - - - - - - - - - -
 _NEXNOT         dec NoteNumber,X
                 dec MCNT1,X
                 beq _ZVOL
@@ -38,8 +40,10 @@ _NEXNOT         dec NoteNumber,X
                 sta VOL1,X
                 lda FREQ,Y
                 ;--sta AUDF1,X
+
                 jmp _STOVOL
 
+; - - - - - - - - - - - - - - - - - - -
 _ZVOL           lda #$00
                 sta VOL1,X
                 sta DUR1,X
@@ -67,6 +71,7 @@ _DECVOI         dex
 
                 jmp STCOL._LAB02_BAD
 
+; - - - - - - - - - - - - - - - - - - -
 _NOVOI          lda #$00
                 ;--sta AUDC1,X
                 beq _DECVOI
@@ -74,13 +79,13 @@ _NOVOI          lda #$00
 _ZERODR         lda #$00
                 sta DUR1,X
                 beq _DECVOI
-                bne _STOVOL             ; UNC
+                bne _STOVOL             ; [unc]
 
                 jsr SOUND
 
                 lda ADCOLP
-                asl A
-                asl A
+                asl
+                asl
                 bcc _ZVOL
 
                 rts

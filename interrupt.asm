@@ -100,6 +100,7 @@ _1              pla                     ;   no
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _1r             pla
                 pha
                 cmp #KEY_F2|$80
@@ -111,6 +112,7 @@ _1r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _2              pla
                 pha
                 cmp #KEY_F3
@@ -122,6 +124,7 @@ _2              pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _2r             pla
                 pha
                 cmp #KEY_F3|$80
@@ -133,6 +136,7 @@ _2r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _3              pla
                 pha
                 cmp #KEY_F4
@@ -144,6 +148,7 @@ _3              pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _3r             pla
                 pha
                 cmp #KEY_F4|$80
@@ -155,6 +160,7 @@ _3r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _4              pla
                 pha
                 cmp #KEY_UP
@@ -173,6 +179,7 @@ _4a             lda #itKeyboard
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _4r             pla
                 pha
                 cmp #KEY_UP|$80
@@ -184,6 +191,7 @@ _4r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _5              pla
                 pha
                 cmp #KEY_DOWN
@@ -202,6 +210,7 @@ _5a             lda #itKeyboard
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _5r             pla
                 pha
                 cmp #KEY_DOWN|$80
@@ -213,6 +222,7 @@ _5r             pla
 
                 jmp _CleanUpXIT
 
+; - - - - - - - - - - - - - - - - - - -
 _6              pla
                 pha
                 cmp #KEY_LEFT
@@ -354,6 +364,7 @@ _1              lda isPaused            ; are we paused?
 
                 jmp _XIT                ; when paused, no VBI!
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda vBumpSndCount       ; more bump sound?
                 bmi _3                  ;   no, process timer
 
@@ -375,6 +386,7 @@ _4              lda isFillOn            ; are we filling?
 
                 jmp _XIT                ; when filling, exit VBI
 
+; - - - - - - - - - - - - - - - - - - -
 _5              lda #0                  ; clear out dead flag
                 sta isDead
 
@@ -410,6 +422,7 @@ _9              lda vStarRotTimer       ; star rot. timer zero?
                 dec vStarRotTimer       ; decrement timer
                 jmp _12                 ; and skip rotation.
 
+; - - - - - - - - - - - - - - - - - - -
 _10             lda #1                  ; set rot. timer to 1
                 sta vStarRotTimer
 
@@ -432,21 +445,21 @@ _12             ;ldy StarRotPos
                 ;!!.m16
                 lda StarHorzPos         ; set star's horiz. pos.
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32-6               ; -6, distance to star center
                 sta SP01_X_POS
 
                 lda StarVertPos         ; set star's vert. pos.
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32+24-6            ; +24, account for playfield vertical displacement
                 sta SP01_Y_POS          ; -6, distance to star center
 
                 lda StarRotPos
                 and #$FF                ; byte->word
-                asl A                   ; *2, word lookup table
+                asl                     ; *2, word lookup table
                 tay
                 lda StarRotTbl,Y
                 sta SP01_ADDR
@@ -467,14 +480,14 @@ _13             lda isHidePlayer        ; ok to show player?
                 ;!!.m16
                 lda PX                  ; set player's horizontal position
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32-2               ; -2, distance to player center
                 sta SP00_X_POS
 
                 lda PY                  ; set player's vertical position
                 and #$FF                ; byte->word
-                asl A                   ; *2, account for double-pixel display
+                asl                     ; *2, account for double-pixel display
                 clc                     ; +32, account for off-screen border
                 adc #32+24-2            ; +24, account for playfield vertical displacement
                 sta SP00_Y_POS          ; -2, distance to player center
@@ -490,8 +503,8 @@ _13             lda isHidePlayer        ; ok to show player?
                 stz zpPlayerColorIdx
 
 _14             lda zpPlayerColorIdx
-                asl A                   ; *4
-                asl A
+                asl                     ; *4
+                asl
                 tax
                 ldy #0
 _nextColor      lda palColor0,X

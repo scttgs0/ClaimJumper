@@ -24,7 +24,6 @@ _ATRLP          jsr ENDFR
                 jsr MUSICROU
                 jsr STRTES
                 jsr OP1TES
-
                 jmp _ATRLP
 
                 .endproc
@@ -36,18 +35,21 @@ _ATRLP          jsr ENDFR
 STRTES          lda #$08
                 ;--sta CONSOL
                 ;--lda CONSOL
-                lsr A
+                lsr
                 bcc _STRDB
 
                 lda #$00
                 sta STRTFL
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _STRDB          lda STRTFL
                 beq _PLSTAT
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PLSTAT         pla
                 pla
                 lda #$01
@@ -76,8 +78,9 @@ LA899           jsr CLRSCR
                 ;--sta HITCLR
                 lda GAMENO
                 beq _SS0
-
                 jmp GAME1
+
+; - - - - - - - - - - - - - - - - - - -
 _SS0            jmp GAME0
 
 
@@ -99,9 +102,9 @@ OP1TES          ldx #$01
 OPTES           lda #$08
                 ;--sta CONSOL
                 ;--lda CONSOL
-                lsr A
-                lsr A
-                lsr A
+                lsr
+                lsr
+                lsr
                 bcc _OPDB
 
                 lda #$00
@@ -120,11 +123,13 @@ _next1          adc (zpSCRL+2),Y
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _OPDB           lda OPTFL
                 beq _PLOP
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PLOP           pla
                 pla
                 lda #$01
@@ -140,9 +145,9 @@ _BOPT0          jsr ENDFR
                 jsr STRTES
                 jsr OP1TES
                 jsr SOUND
-
                 jmp _BOPT0
 
+; - - - - - - - - - - - - - - - - - - -
 _OPT1           jsr DROPT2
                 jsr DRTITL
 _BOPT1          jsr ENDFR
@@ -150,7 +155,6 @@ _BOPT1          jsr ENDFR
                 jsr POLL1
                 jsr STRTES
                 jsr OP0TES
-
                 jmp _BOPT1
 
 
@@ -182,9 +186,9 @@ _G0LOOP         lda FRAME
                 bne _SECOND
 
                 jsr MOV0
-
                 jmp _FINISH
 
+; - - - - - - - - - - - - - - - - - - -
 _SECOND         jsr MOV2
 _FINISH         jsr CANROU
                 jsr BUL
@@ -195,7 +199,6 @@ _LA96B_BAD      jsr SOUND
                 jsr OP1TES
                 jsr ENTES0
 _LA977_BAD      jsr ENDFR
-
                 jmp _G0LOOP
 
                 .endproc
@@ -263,7 +266,6 @@ _GQ1            jsr CANROU
                 jsr OP1TES
                 jsr ENTES1
                 jsr ENDFR
-
                 jmp _G1LOOP
 
 
@@ -335,6 +337,7 @@ COLPF           .proc
                 ;--sta COLOR3              ; BILLS
                 lda #$00
                 ;--sta COLOR4
+
                 rts
                 .endproc
 
@@ -351,6 +354,7 @@ COLPM           .proc
                 ;--sta PCOLR1              ; NUGGET
                 lda #$28
                 ;--sta PCOLR3              ; FACES
+
                 rts
                 .endproc
 
@@ -446,8 +450,10 @@ _NXTCL          lda zpSCDATA
 
                 lda #$00
                 sta L1FD8
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _LAB02_BAD      lda #$A3
                 sta zpSCRH
 
@@ -477,19 +483,19 @@ DRTITL          .proc
                 beq _TITLE1
 
                 ldy #$CB
-                bne _TITLE              ; UNC
+                bne _TITLE              ; [unc]
 
                 ldy #$0B
-                bne _TITLE              ; UNC
+                bne _TITLE              ; [unc]
 
 _TITLE0         ldy #$17
-                bne _TITLE              ; UNC
+                bne _TITLE              ; [unc]
 
 _TITLE1         ldy #$23
-                bne _TITLE              ; UNC
+                bne _TITLE              ; [unc]
 
 _TITLEA         ldy #$0B
-                bne _TITLE              ; UNC
+                bne _TITLE              ; [unc]
 
 _TITLE6         ldy #$53
 _TITLE          ldx #$0B
@@ -532,7 +538,6 @@ _next1          lda FTABLE_ROM,X
                 sta DLIST_RAM,X
                 dex
                 bpl _next1
-
                 jmp START
 
 
@@ -606,12 +611,17 @@ DROPT6          .proc
                 beq _DG1
 
                 stx SQ03
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _DG0            stx SQ01
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _DG1            stx SQ02
+
                 rts
                 .endproc
 
@@ -642,19 +652,22 @@ POLL0           .proc
                 lda #$08
                 ;--sta CONSOL
                 ;--lda CONSOL
-                lsr A
-                lsr A
+                lsr
+                lsr
                 bcc _PUSHTC
 
                 lda #$00
                 sta SELFLG
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _PUSHTC         lda SELFLG
                 beq _ADV0
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _ADV0           lda #$01
                 sta SELFLG
                 inc GAMENO
@@ -664,6 +677,7 @@ _ADV0           lda #$01
 
                 lda #$00
                 sta GAMENO
+
 _GNOK           jmp DROPT6
 
                 .endproc
@@ -685,6 +699,7 @@ CRECHG          .proc
                 ldx #$01
                 lda CRECR1-1,X
                 sta CRECRI
+
 _CRTS           rts
                 .endproc
 
@@ -705,8 +720,9 @@ ENTES0          .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _P0WINS         ldx #$00
-                beq _GOWIN              ; UNC
+                beq _GOWIN              ; [unc]
 
 _P2WINS         ldx #$01
 _GOWIN          stx WINNER
@@ -715,15 +731,16 @@ _GOWIN          stx WINNER
                 sta SCOR0,X
                 lda #$1A
                 sta WINCNT
+
                 jmp WIN
 
+; - - - - - - - - - - - - - - - - - - -
 _ENLOOP         pla
                 pla
 _next1          jsr ENDFR
                 jsr STRTES
                 jsr OP1TES
                 jsr SOUND
-
                 jmp _next1
 
                 .endproc
@@ -742,6 +759,7 @@ ENTES1          .proc
                 jsr DRTITL._TITLE6      ; WIN
                 jmp ENTES0._ENLOOP
 
+; - - - - - - - - - - - - - - - - - - -
 _STKTS0         lda STNUM0
                 beq _SRTS
 
@@ -758,6 +776,7 @@ _STKTS0         lda STNUM0
                 jsr DRTITL._TITLEA      ; LOSE [TITLE5??]
                 jmp ENTES0._ENLOOP
 
+; - - - - - - - - - - - - - - - - - - -
 _SRTS           rts
 
 
@@ -792,6 +811,7 @@ POLL1           .proc
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _POL1OK         ;--lda STRIG0
                 bne _UNLOK0
 
@@ -814,12 +834,14 @@ _POLTG1         ;--lda STRIG1
 
 _POLRTS         rts
 
+; - - - - - - - - - - - - - - - - - - -
 _UNLOK0         lda #$00
                 sta TRG0FL
-                beq _POLTG1             ; UNC
+                beq _POLTG1             ; [unc]
 
 _UNLOK1         lda #$00
                 sta TRG1FL
+
                 rts
                 .endproc
 
@@ -847,7 +869,7 @@ DOPT0           .proc
                 cmp #$03
                 bne _DISP0
 
-                asl A
+                asl
 _DISP0          jsr CHEKNO
 
                 stx SQ1
@@ -857,6 +879,7 @@ _DISP0          jsr CHEKNO
                 jsr CHEKNO
 
                 stx SQ3
+
                 rts
                 .endproc
 
@@ -885,7 +908,7 @@ DOPT2           .proc
                 cmp #$03
                 bne _DISP2
 
-                asl A
+                asl
 _DISP2          jsr CHEKNO
 
                 stx SQ4
@@ -895,6 +918,7 @@ _DISP2          jsr CHEKNO
                 jsr CHEKNO
 
                 stx SQ6
+
                 rts
                 .endproc
 
@@ -903,12 +927,13 @@ _DISP2          jsr CHEKNO
 ;
 ;======================================
 CHEKNO          .proc
-                lsr A
+                lsr
                 bcs _CH
 
                 ldx #$71                ; NOCHK
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _CH             ldx #$78                ; CHK
                 rts
                 .endproc
@@ -932,12 +957,15 @@ FIXOP0          .proc
 _EX6BL0         lda #$06
                 sta BONUS0
                 inc GAME0._LA96B_BAD
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _F03            jsr HEAD0
 
 _NOBON0         ldx #$00
                 stx BONUS0
+
                 rts
                 .endproc
 
@@ -957,6 +985,7 @@ _HDLP0          sta L1FB3,X
                 sta XFREQ
                 lda #$05
                 sta EVERY
+
                 rts
                 .endproc
 
@@ -978,13 +1007,17 @@ FIXOP2          .proc
 
 _EX6BL2         lda #$06
                 sta BONUS2
+
                 inc GAME0._LA977_BAD
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _F23            jsr HEAD2
 
 _NOBON2         ldx #$00
                 stx BONUS2
+
                 rts
                 .endproc
 
@@ -1155,6 +1188,7 @@ _BOT3           dec zpSCRL+4
                 sta MCNT4
                 lda #$FF
                 sta FRAMM
+
                 rts
                 .endproc
 
@@ -1178,8 +1212,10 @@ TESTX           .proc
                 pla
                 tax
                 dec NUMBT0
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _TEST2          cmp #$02
                 bne _TEST3
 
@@ -1194,13 +1230,16 @@ _TEST2          cmp #$02
                 pla
                 tax
                 dec NUMBT2
+
 _XRTS           rts
 
+; - - - - - - - - - - - - - - - - - - -
 _TEST3          cmp #$05
                 bcc _XRTS
 
                 lda #$00                ; ON EGG
                 sta EGGP                ; =EGGP
+
                 rts
                 .endproc
 
@@ -1235,6 +1274,7 @@ _GOBUY          cld
 
                 lda #$06
                 sta L0668               ; SUBSNK
+
 _GRTS           rts
 
 
@@ -1310,6 +1350,7 @@ _REMSNK         nop
                 tax
                 sta (zpSCRL,X)
 LAF55           sta (zpSCRL+2,X)
+
                 jmp WIN._SNBANG
 
 

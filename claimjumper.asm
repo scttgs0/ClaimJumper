@@ -43,8 +43,10 @@
 ;--------------------------------------
 
 BOOT            cld                     ; clear decimal
+
                 ldx #$FF                ; initialize the stack
                 txs
+
                 jmp CART_START
 
 ;--------------------------------------
@@ -423,6 +425,7 @@ _next4          lda L94B0,X
                 bne _next4
 
                 stx L1FFF
+
 _XIT            rts
 
 
@@ -462,13 +465,16 @@ _next1          lda MsgYouLose,Y
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _4              ldx #$17
                 lda #$00
 _next2          sta L1FE0,X
+
                 dex
                 bpl _next2
 
                 rts
+
 
 ;--------------------------------------
 ;--------------------------------------
@@ -687,6 +693,7 @@ _next2          ;--lda VCOUNT
 
                 rts
 
+
 ;--------------------------------------
 ;--------------------------------------
 
@@ -767,8 +774,10 @@ _2              nop
                 tax
                 sta (zpSCRL,X)
                 sta (zpSCRL+2,X)
+
                 jmp L4F87
 
+; - - - - - - - - - - - - - - - - - - -
                 ldx #$03
 _next2          lda L39F2,X
                 sta L1F9A,X
@@ -779,13 +788,16 @@ _next2          lda L39F2,X
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
                 eor (L00A9,X)
                 .byte $00
                 tax
                 sta (zpSCRL,X)
                 sta (zpSCRL+2,X)
+
                 jmp L4FA4
 
+; - - - - - - - - - - - - - - - - - - -
                 ldx #$03
 _next3          lda L39F2,X
                 sta L5F9A,X
@@ -878,6 +890,7 @@ LBBC0           jsr LBF5B
 
                 jmp LBC5F
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ;--lda RANDOM
                 and #$0F
                 bne _XIT
@@ -907,13 +920,13 @@ _1              ;--lda RANDOM
                 dec zpSCRL
                 jsr LBF3B
 
-                asl A
-                asl A
+                asl
+                asl
                 sta zpXP1
                 tya
-                asl A
-                asl A
-                asl A
+                asl
+                asl
+                asl
                 clc
                 adc #$09
                 sta zpYP1
@@ -926,6 +939,7 @@ _1              ;--lda RANDOM
 
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              lda zpYP1
                 sec
                 sbc zpYP2
@@ -936,6 +950,7 @@ _2              lda zpYP1
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _3              lda zpXP1
                 sec
                 sbc zpXP0
@@ -946,6 +961,7 @@ _3              lda zpXP1
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda zpXP1
                 sec
                 sbc zpXP2
@@ -956,6 +972,7 @@ _4              lda zpXP1
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _5              ldx #$FF
                 stx FRAMM
                 lda #$01
@@ -982,6 +999,7 @@ LBC5F           bpl _1
 
                 jmp LBCF0
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda CNTYPE
                 cmp #$FF
                 bne _2
@@ -1002,6 +1020,7 @@ _1              lda CNTYPE
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _2              ;--lda P1PL
                 and #$05
                 bne LBCA5
@@ -1021,6 +1040,7 @@ _3              jsr LBF0D
 
                 jmp LBD99
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            rts
 
 
@@ -1038,6 +1058,7 @@ LBCA5           cmp #$05
 
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              and #$01
                 beq LBCD0
 
@@ -1116,18 +1137,22 @@ LBCF0           jsr LBE30
 
                 jmp LBD99
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ;--lda STRIG0
                 bne LBD99
 
                 ldx #$00
                 jmp _4
 
+; - - - - - - - - - - - - - - - - - - -
 _next1          inc SCOR0
                 ldx SCOR0
                 lda #$88
                 sta L1FB3,X
+
                 jmp LBDAD
 
+; - - - - - - - - - - - - - - - - - - -
 _2              jsr LBF0D
                 jsr LBE26
 
@@ -1149,6 +1174,7 @@ _2              jsr LBF0D
 
                 jmp LBD99
 
+; - - - - - - - - - - - - - - - - - - -
 _3              ;--lda STRIG1
                 bne LBD99
 
@@ -1185,6 +1211,7 @@ _6              lda #$01
 
                 jmp LBD99
 
+; - - - - - - - - - - - - - - - - - - -
 _7              jsr LBF30
 
 
@@ -1223,6 +1250,7 @@ LBDAD           jsr LBF0D
                 sta MCNT4
                 lda #$FF
                 sta FRAMM
+
                 rts
 
 
@@ -1266,6 +1294,7 @@ LBDE3           ;--lda RANDOM
                 sbc #$28
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda zpYP0,X
                 sbc #$10
                 cmp #$28
@@ -1274,6 +1303,7 @@ _1              lda zpYP0,X
                 adc #$28
 _2              sta zpYP1
                 sta zpYP
+
                 rts
 
 
@@ -1291,6 +1321,7 @@ LBE04           ;--lda RANDOM
                 sbc #$15
                 jmp _2
 
+; - - - - - - - - - - - - - - - - - - -
 _1              lda zpXP0,X
                 sbc #$09
                 cmp #$34
@@ -1299,6 +1330,7 @@ _1              lda zpXP0,X
                 adc #$15
 _2              sta zpXP1
                 ;--sta HPOSP1
+
                 rts
 
 
@@ -1345,8 +1377,10 @@ LBE30           lda STATCN
                 sta zpXP1
                 pla
                 pla
+
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _1              ;--lda M1PL
                 and #$02
                 beq _XIT
@@ -1385,6 +1419,7 @@ _3              lda #$0A
 
                 lda #$00
                 sta STATCN
+
                 rts
 
 
@@ -1397,6 +1432,7 @@ LBEAC           lda PMSCAL
                 lda #$00
                 sta PMSTOR
                 sta L0BD6
+
                 rts
 
 
@@ -1410,6 +1446,7 @@ LBEBD           lda #$08
                 lda PMSCAL
                 and #$F3
                 sta PMSCAL
+
                 rts
 
 
@@ -1441,6 +1478,7 @@ _next1          ;--lda RANDOM
                 tay
                 sty zpSCRH+4
                 sta (zpSCRL+4),Y
+
                 rts
 
 
@@ -1471,6 +1509,7 @@ LBF0D           lda #$0D
                 ;--sta HPOSP1
                 lda zpYP1
                 sta zpYP
+
                 rts
 
 
@@ -1482,6 +1521,7 @@ LBF1D           bpl _XIT
                 eor #$FF
                 clc
                 adc #$01
+
 _XIT            rts
 
 
@@ -1492,6 +1532,7 @@ LBF25           lda #$A0
                 ;--sta AUD1
                 lda #$80
                 sta DUR1
+
                 rts
 
 
@@ -1502,6 +1543,7 @@ LBF30           lda #$A0
                 ;--sta AUD3
                 lda #$80
                 sta DUR3
+
                 rts
 
 
@@ -1531,6 +1573,7 @@ _next2          iny
 
                 sec
                 sbc #$0D
+
                 rts
 
 
@@ -1567,8 +1610,10 @@ _3              lda STATCN
                 ;--sta HPOSM1
                 lda #$1C
                 sta scrnL02C24
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _4              lda FRAME
                 and #$08
                 beq _7
@@ -1594,14 +1639,18 @@ _5              ldx #$1E
 
 _6              lda #$7F
                 ;--sta HPOSM1
+
 _XIT            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _7              lda #$07
                 sta L1F8C
                 sta L1FAB
 _8              lda #$00
                 sta scrnL02C24
+
                 rts
+
 
 ;--------------------------------------
 ;--------------------------------------

@@ -8,12 +8,14 @@ CREATE          lda FRAME
 
                 jmp _Q32
 
+; - - - - - - - - - - - - - - - - - - -
 _Q30            ldx #$00
                 lda EGGP
                 bne _Q50
 
                 jmp _CRTEST
 
+; - - - - - - - - - - - - - - - - - - -
 _Q50            lda EGGSCH
                 sta zpSCRH
                 lda EGGSCL
@@ -31,8 +33,10 @@ _Q50            lda EGGSCH
                 sec
                 sbc #$01
                 sta (zpSCRL,X)
+
 _Q32            rts
 
+; - - - - - - - - - - - - - - - - - - -
 _Q31            sec
                 sbc #$01
                 sta (zpSCRL,X)
@@ -41,13 +45,14 @@ _Q31            sec
 
                 jmp _Q32
 
+; - - - - - - - - - - - - - - - - - - -
 _PLSNK          ldx #$00
                 ;--lda RANDOM              ; CHANCE OF NEW COLR
                 bmi _PP0
-                bpl _PP2                ; UNC
+                bpl _PP2                ; [unc]
 
 _PP0            lda #$10                ; PURSUE PL0
-                bne _Q34                ; UNC
+                bne _Q34                ; [unc]
 
 _PP2            lda #$30                ; PURSUE PL2
 _Q34            sta (zpSCRL,X)
@@ -79,8 +84,10 @@ _SVZCOR         stx SNKIDX
                 sta SCRLZ0,X
                 lda EGGSCH
                 sta SCRHZ0,X
+
                 jmp _Q32
 
+; - - - - - - - - - - - - - - - - - - -
 _CRTEST         lda NUMSNK
                 cmp #$0A
                 bcs _Q32                ; ALREADY 10
@@ -91,6 +98,7 @@ _CRTEST         lda NUMSNK
 
                 jmp _Q32
 
+; - - - - - - - - - - - - - - - - - - -
 _GOCREA         jsr RANDSC
 
                 lda (zpSCRL,X)
@@ -119,6 +127,7 @@ _Q45            sta zpSCRL+2
                 sta EGGSCL
                 lda zpSCRH
                 sta EGGSCH
+
 _Q1RTS          rts
 
 
@@ -141,8 +150,10 @@ RANDSC          .proc
                 sta zpSCRH+4
                 lda #$02
                 sta (zpSCRL+4),Y
+
                 rts
 
+; - - - - - - - - - - - - - - - - - - -
 _TESLOW         lda zpSCRH
                 cmp #$1F
                 beq RANDSC
@@ -179,6 +190,7 @@ _SUB40B         iny
 
                 sec
                 sbc #$0D
+
 L9BB4           rts
 
 
