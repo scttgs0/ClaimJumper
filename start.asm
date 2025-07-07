@@ -501,6 +501,7 @@ _TITLE6         ldy #$53
 _TITLE          ldx #$0B
 _QS11           lda MsgYouLose,Y
                 sta L1FE6,X
+
                 dey
                 dex
                 bpl _QS11

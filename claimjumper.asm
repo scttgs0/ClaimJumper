@@ -47,6 +47,12 @@ BOOT            cld                     ; clear decimal
                 ldx #$FF                ; initialize the stack
                 txs
 
+                stz IOPAGE_CTRL
+
+                stz BACKGROUND_COLOR_R
+                stz BACKGROUND_COLOR_G
+                stz BACKGROUND_COLOR_B
+
                 jmp CART_START
 
 ;--------------------------------------
