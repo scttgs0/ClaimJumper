@@ -529,7 +529,6 @@ _QP             sta PAGE6_BASE,X
 ; Start of code
 ;--------------------------------------
 ;--------------------------------------
-
 CART_START      ldx #$28
 _next1          lda FTABLE_ROM,X
                 sta LBB80_DLIST,X       ; copy protection -- attempt to write to ROM
@@ -537,6 +536,7 @@ _next1          lda FTABLE_ROM,X
 
                 lda LBB80_DLIST,X
                 sta DLIST_RAM,X
+
                 dex
                 bpl _next1
                 jmp START
@@ -549,6 +549,7 @@ HOSPIT          .proc
                 ldx #$00
 _QS9            lda L9800,X
                 sta scrnL00C16,X
+
                 dex
                 bne _QS9
 

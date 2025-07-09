@@ -1,4 +1,9 @@
 
+; SPDX-FileName: interrupt.asm
+; SPDX-FileCopyrightText: Copyright 2025, Scott Giese
+; SPDX-License-Identifier: GPL-3.0-or-later
+
+
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Main IRQ Handler
@@ -11,10 +16,12 @@ irqMain         .proc
 
                 cld
 
+; - - - - - - - - - - - - - - - - - - -
 ;   switch to system map
                 lda IOPAGE_CTRL
                 pha                     ; preserve
                 stz IOPAGE_CTRL
+; - - - - - - - - - - - - - - - - - - -
 
                 lda INT_PENDING_REG0
                 sta irq_pending
@@ -41,8 +48,10 @@ _chkSOL         ;!!lda irq_pending
 
                 ;!!jsr irqDLIHandler
 
+; - - - - - - - - - - - - - - - - - - -
 _XIT            pla                     ; restore
                 sta IOPAGE_CTRL
+; - - - - - - - - - - - - - - - - - - -
 
                 ply
                 plx
@@ -516,8 +525,7 @@ _nextColor      lda palColor0,X
 
                 jsr InitLUT
 
-_XIT            ;!!.m16i16
-                ply
+_XIT            ply
                 plx
                 pla
                 rts

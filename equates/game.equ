@@ -204,8 +204,10 @@ L4FA4               = $4FA4
 L5F9A               = $5F9A
 L5FC2               = $5FC2
 
+;--------------------------------------
+
 CharResX        = 40
 CharResY        = 30
 
-TRUE            = 1
 FALSE           = 0
+TRUE            = 1
